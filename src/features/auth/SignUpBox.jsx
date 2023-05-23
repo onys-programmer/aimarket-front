@@ -21,16 +21,17 @@ export default function LoginBox() {
       </S.TitleWrapper>
       <S.ContentWrapper>
         <S.TitleWrapper>
-          <S.Title>Log in</S.Title>
+          <S.Title>회원 가입</S.Title>
         </S.TitleWrapper>
         <Stack spacing={3} width="100%">
           <Input placeholder="email" onChange={onChangeEmailInput} />
-          <Input placeholder="password" type="password" onChange={onChangePasswordInput} />
+          <Input placeholder="비밀번호" type="password" onChange={onChangePasswordInput} />
+          <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordInput} />
         </Stack>
       </S.ContentWrapper>
       <S.ButtonWrapper>
         <Button colorScheme='blue' variant='outline'>
-          LOG IN
+          회원 가입
         </Button>
       </S.ButtonWrapper>
     </Card >
