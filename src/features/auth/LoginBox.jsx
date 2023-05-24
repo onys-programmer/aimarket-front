@@ -4,20 +4,29 @@ import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { useDispatch } from 'react-redux';
 import { updateToken } from '../../app/slice';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginBox() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
 
+  // if enter key is pressed, submit
+  const onEnterLogin = (e) => {
+    if (e.key === 'Enter') {
+      onClickLogin();
+    }
+  };
+
   const onChangeEmailInput = (e) => {
     setEmailInput(e.target.value);
   };
+
   const onChangePasswordInput = (e) => {
     setPasswordInput(e.target.value);
   };
-  console.log(emailInput, passwordInput);
 
   const requestLogin = async (data) => {
     const response = await fetch(`${BASE_URL}/users/login`, {
@@ -28,14 +37,21 @@ export default function LoginBox() {
     const result = await response.json();
 
     dispatch(updateToken(result.token));
-    alert('로그인이 완료되었습니다.', result.token);
+    return result.token;
   };
 
   const onClickLogin = async () => {
-    requestLogin({
+    const token = requestLogin({
       email: emailInput,
       password: passwordInput,
     });
+    // go to main page
+    if (token) {
+      alert('환영합니다. aimarket입니다.', token);
+      navigate('/');
+    } else {
+      alert('로그인에 실패하였습니다.');
+    }
   };
 
   return (
@@ -48,8 +64,8 @@ export default function LoginBox() {
           <S.Title>Log in</S.Title>
         </S.TitleWrapper>
         <Stack spacing={3} width="100%">
-          <Input placeholder="email" onChange={onChangeEmailInput} />
-          <Input placeholder="password" type="password" onChange={onChangePasswordInput} />
+          <Input placeholder="email" onChange={onChangeEmailInput} onKeyDown={onEnterLogin} />
+          <Input placeholder="password" type="password" onChange={onChangePasswordInput} onKeyDown={onEnterLogin} />
         </Stack>
       </S.ContentWrapper>
       <S.ButtonWrapper>
