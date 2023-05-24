@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 
 export default function LoginBox() {
+
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordCheckInput, setPasswordCheckInput] = useState('');
@@ -25,7 +26,7 @@ export default function LoginBox() {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    console.log(result);
+    alert('회원가입이 완료되었습니다.', result);
   };
 
   const onSubmit = () => {

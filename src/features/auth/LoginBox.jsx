@@ -2,8 +2,12 @@ import styled from '@emotion/styled';
 import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
+import { useDispatch } from 'react-redux';
+import { updateToken } from '../../app/slice';
 
 export default function LoginBox() {
+  const dispatch = useDispatch();
+
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
 
@@ -22,7 +26,9 @@ export default function LoginBox() {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-    console.log(result);
+
+    dispatch(updateToken(result.token));
+    alert('로그인이 완료되었습니다.', result.token);
   };
 
   const onClickLogin = async () => {

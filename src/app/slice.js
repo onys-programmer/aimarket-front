@@ -5,10 +5,12 @@ const initialState = {
 }
 
 export const slice = createSlice({
+  name: 'app',
   initialState,
   reducers: {
     updateToken: (state, action) => {
       state.token = action.payload;
+      localStorage.setItem('token', action.payload);
     },
     deleteToken: (state) => {
       state.token = null;
