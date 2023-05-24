@@ -8,13 +8,16 @@ import './index.css';
 import router from './router';
 import reportWebVitals from './reportWebVitals';
 
-
+import { store } from './app/store'
+import { Provider } from 'react-redux'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
-      <RouterProvider router={router} />
+      <Provider store={store}>
+        <RouterProvider router={router} />
+      </Provider>
     </ChakraProvider>
   </React.StrictMode>
 );

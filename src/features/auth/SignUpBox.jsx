@@ -1,10 +1,12 @@
 import styled from '@emotion/styled';
 import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState } from 'react';
+import { BASE_URL } from '../../services/api/api';
 
 export default function LoginBox() {
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+  const [passwordCheckInput, setPasswordCheckInput] = useState('');
 
   const onChangeEmailInput = (e) => {
     setEmailInput(e.target.value);
@@ -12,6 +14,32 @@ export default function LoginBox() {
   const onChangePasswordInput = (e) => {
     setPasswordInput(e.target.value);
   };
+  const onChangePasswordCheckInput = (e) => {
+    setPasswordCheckInput(e.target.value);
+  };
+
+  const requestSignUp = async (data) => {
+    const response = await fetch(`${BASE_URL}/users/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    console.log(result);
+  };
+
+  const onSubmit = () => {
+    if (passwordInput !== passwordCheckInput) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    } else {
+      requestSignUp({
+        email: emailInput,
+        password: passwordInput,
+      });
+    }
+  };
+
   console.log(emailInput, passwordInput);
 
   return (
@@ -26,11 +54,11 @@ export default function LoginBox() {
         <Stack spacing={3} width="100%">
           <Input placeholder="email" onChange={onChangeEmailInput} />
           <Input placeholder="비밀번호" type="password" onChange={onChangePasswordInput} />
-          <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordInput} />
+          <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordCheckInput} />
         </Stack>
       </S.ContentWrapper>
       <S.ButtonWrapper>
-        <Button colorScheme='blue' variant='outline'>
+        <Button colorScheme='blue' variant='outline' onClick={onSubmit}>
           회원 가입
         </Button>
       </S.ButtonWrapper>
@@ -39,24 +67,24 @@ export default function LoginBox() {
 }
 
 const S = {
-  Container: styled.div`
-    box-sizing: border-box;
-    width: 353px;
-    height: min-content; /* 282px */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 16px 16px 16px;
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-    overflow: visible;
-    align-content: center;
-    flex-wrap: nowrap;
-    gap: 0;
-    position: absolute;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-  `,
+  // Container: styled.div`
+  //   box-sizing: border-box;
+  //   width: 353px;
+  //   height: min-content; /* 282px */
+  //   display: flex;
+  //   flex-direction: column;
+  //   justify-content: center;
+  //   align-items: center;
+  //   padding: 16px 16px 16px 16px;
+  //   box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
+  //   overflow: visible;
+  //   align-content: center;
+  //   flex-wrap: nowrap;
+  //   gap: 0;
+  //   position: absolute;
+  //   border-radius: 8px;
+  //   border: 1px solid #e2e8f0;
+  // `,
   ContentWrapper: styled.div`
     box-sizing: border-box;
     flex-shrink: 0;

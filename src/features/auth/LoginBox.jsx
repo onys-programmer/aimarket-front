@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState } from 'react';
+import { BASE_URL } from '../../services/api/api';
 
 export default function LoginBox() {
   const [emailInput, setEmailInput] = useState('');
@@ -13,6 +14,23 @@ export default function LoginBox() {
     setPasswordInput(e.target.value);
   };
   console.log(emailInput, passwordInput);
+
+  const requestLogin = async (data) => {
+    const response = await fetch(`${BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    console.log(result);
+  };
+
+  const onClickLogin = async () => {
+    requestLogin({
+      email: emailInput,
+      password: passwordInput,
+    });
+  };
 
   return (
     <Card padding={'40px'} borderRadius={'8px'}>
@@ -29,7 +47,7 @@ export default function LoginBox() {
         </Stack>
       </S.ContentWrapper>
       <S.ButtonWrapper>
-        <Button colorScheme='blue' variant='outline'>
+        <Button colorScheme='blue' variant='outline' onClick={onClickLogin}>
           LOG IN
         </Button>
       </S.ButtonWrapper>
@@ -38,24 +56,6 @@ export default function LoginBox() {
 }
 
 const S = {
-  Container: styled.div`
-    box-sizing: border-box;
-    width: 353px;
-    height: min-content; /* 282px */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 16px 16px 16px 16px;
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.25);
-    overflow: visible;
-    align-content: center;
-    flex-wrap: nowrap;
-    gap: 0;
-    position: absolute;
-    border-radius: 8px;
-    border: 1px solid #e2e8f0;
-  `,
   ContentWrapper: styled.div`
     box-sizing: border-box;
     flex-shrink: 0;
