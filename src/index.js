@@ -7,20 +7,30 @@ import {
 import './index.css';
 import router from './router';
 import reportWebVitals from './reportWebVitals';
+import styled from '@emotion/styled';
 
 import { store } from './app/store'
 import { Provider } from 'react-redux'
+
+const S = {
+  Container: styled.div`
+    background-color: #f5f5f5;  
+  `,
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <ChakraProvider>
       <Provider store={store}>
-        <RouterProvider router={router} />
+        <S.Container>
+          <RouterProvider router={router} />
+        </S.Container>
       </Provider>
     </ChakraProvider>
   </React.StrictMode>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

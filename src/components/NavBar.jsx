@@ -1,35 +1,46 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Button } from '@chakra-ui/react';
 
 export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem('token'));
+  const navigate = useNavigate();
+
+  const handleClickGoHome = () => {
+    navigate('/');
+  };
+
+  const handleClickGoPosting = () => {
+    navigate('/posting');
+  };
 
   return (
     <S.Container>
+      <S.NavItem onClick={handleClickGoHome}>
+        <S.SectionTitleEng>
+          aimarket
+        </S.SectionTitleEng>
+      </S.NavItem>
       <li>
-        <a href="/">
-          <S.SectionTitleEng>
-            aimarket
-          </S.SectionTitleEng>
-        </a>
+        <Button colorScheme='red' borderRadius={'24px'} onClick={handleClickGoPosting}>만들기</Button>
       </li>
       {
         token
           ?
-          <li>
+          <S.NavItemAuth>
             <Button variant='outline' colorScheme='gray'>
               로그아웃
             </Button>
-          </li>
+          </S.NavItemAuth>
           :
-          <li>
+          <S.NavItemAuth>
             <a href="/login">
               <Button variant='outline' colorScheme='gray'>
                 로그인
               </Button>
             </a>
-          </li>
+          </S.NavItemAuth>
       }
     </S.Container>
   );
@@ -37,16 +48,23 @@ export default function NavBar() {
 
 const S = {
   Container: styled.ul`
-    position: absolute;
-    padding: 40px;
-    font-family: 'Noto Sans KR', sans-serif;
-    list-style: none;
     width: 100%;
     height: 70px; /* 104px */
+    padding: 40px;
+    background-color: #ffffff;
+    font-family: 'Noto Sans KR', sans-serif;
+    list-style: none;
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 36px;
     align-items: center;
     border-bottom: 1px solid #eaeaea;
+  `,
+  NavItem: styled.li`
+    cursor: pointer;
+  `,
+  NavItemAuth: styled.li`
+    margin-left: auto;
   `,
   SectionTitleEng: styled.h2`
     font-family: 'League Spartan', sans-serif;
