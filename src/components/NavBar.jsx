@@ -2,11 +2,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Button } from '@chakra-ui/react';
+import LogOutButton from './LogOutButton';
+import LogInButton from './LogInButton';
 
 export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const navigate = useNavigate();
-
+  console.log(token, "token");
   const handleClickGoHome = () => {
     navigate('/');
   };
@@ -30,17 +32,11 @@ export default function NavBar() {
           token
             ?
             <S.NavItemAuth>
-              <Button variant='outline' colorScheme='gray'>
-                로그아웃
-              </Button>
+              <LogOutButton />
             </S.NavItemAuth>
             :
             <S.NavItemAuth>
-              <a href="/login">
-                <Button variant='outline' colorScheme='gray'>
-                  로그인
-                </Button>
-              </a>
+              <LogInButton />
             </S.NavItemAuth>
         }
       </S.Container>
