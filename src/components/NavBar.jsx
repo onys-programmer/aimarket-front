@@ -16,33 +16,35 @@ export default function NavBar() {
   };
 
   return (
-    <S.Container>
-      <S.NavItem onClick={handleClickGoHome}>
-        <S.SectionTitleEng>
-          aimarket
-        </S.SectionTitleEng>
-      </S.NavItem>
-      <li>
-        <Button colorScheme='red' borderRadius={'24px'} onClick={handleClickGoPosting}>만들기</Button>
-      </li>
-      {
-        token
-          ?
-          <S.NavItemAuth>
-            <Button variant='outline' colorScheme='gray'>
-              로그아웃
-            </Button>
-          </S.NavItemAuth>
-          :
-          <S.NavItemAuth>
-            <a href="/login">
+    <>
+      <S.Container>
+        <S.NavItem onClick={handleClickGoHome}>
+          <S.SectionTitleEng>
+            aimarket
+          </S.SectionTitleEng>
+        </S.NavItem>
+        <li>
+          <Button colorScheme='red' borderRadius={'24px'} onClick={handleClickGoPosting}>만들기</Button>
+        </li>
+        {
+          token
+            ?
+            <S.NavItemAuth>
               <Button variant='outline' colorScheme='gray'>
-                로그인
+                로그아웃
               </Button>
-            </a>
-          </S.NavItemAuth>
-      }
-    </S.Container>
+            </S.NavItemAuth>
+            :
+            <S.NavItemAuth>
+              <a href="/login">
+                <Button variant='outline' colorScheme='gray'>
+                  로그인
+                </Button>
+              </a>
+            </S.NavItemAuth>
+        }
+      </S.Container>
+    </>
   );
 }
 

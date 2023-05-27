@@ -3,6 +3,7 @@ import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import PostingPage from './pages/PostingPage';
+import PostDetailPage from './pages/PostDetailPage';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
   {
     path: '/posting',
     element: <PostingPage />,
+  },
+  {
+    path: '/post/:postId',
+    element: <PostDetailPage />,
   }
 ]);
 

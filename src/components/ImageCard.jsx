@@ -1,7 +1,8 @@
 import { Card } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
-export default function ImageCard({ thumbnailImage }) {
+export default function ImageCard({ post }) {
+  const thumbnailImage = post.thumbnail;
   return (
     <Card width={"236px"} height="fit-content" padding="4px" background={"none"} shadow={"none"}>
       <S.Thumbnail src={thumbnailImage} />

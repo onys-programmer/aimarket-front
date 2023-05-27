@@ -14,6 +14,7 @@ import { Provider } from 'react-redux'
 
 const S = {
   Container: styled.div`
+    height: fit-content;
     background-color: #f5f5f5;  
   `,
 };

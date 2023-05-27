@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   token: null,
-  thumbnailImages: [],
+  mainPosts: [],
 }
 
 export const slice = createSlice({
@@ -16,13 +16,13 @@ export const slice = createSlice({
     deleteToken: (state) => {
       state.token = null;
     },
-    updateThumbnailImages: (state, action) => {
-      state.thumbnailImages = action.payload;
+    updateMainPosts: (state, action) => {
+      state.mainPosts = action.payload;
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateToken, deleteToken, updateThumbnailImages } = slice.actions;
+export const { updateToken, deleteToken, updateMainPosts } = slice.actions;
 
 export default slice.reducer;

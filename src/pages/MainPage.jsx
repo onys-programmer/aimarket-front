@@ -5,12 +5,14 @@ import Masonry from 'react-masonry-css';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateThumbnailImages } from '../app/slice';
+import { updateMainPosts } from '../app/slice';
 import { BASE_URL } from '../services/api/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainPage() {
   const dispatch = useDispatch();
-  const thumbnailImages = useSelector((state) => state.app.thumbnailImages);
+  const mainPosts = useSelector((state) => state.app.mainPosts);
+  const navigate = useNavigate();
 
   const fetchPosts = async (pageNum) => {
     const response = await axios.get(`${BASE_URL}/posts/`, {
@@ -20,13 +22,11 @@ export default function MainPage() {
       },
     });
     const posts = response.data.posts;
-    console.log(posts);
     if (!posts) {
       alert('이미지를 불러오는데 실패하였습니다.');
       return;
     }
-    const thumbnailImages = posts.map((post) => post.thumbnail);
-    dispatch(updateThumbnailImages(thumbnailImages));
+    dispatch(updateMainPosts(posts));
   }
 
   useEffect(() => {
@@ -41,6 +41,11 @@ export default function MainPage() {
     500: 1
   };
 
+  const handleClickGoToPost = (postId) => {
+    // console.log(postId)
+    navigate(`/post/${postId}`);
+  };
+
   return (
     <>
       <NavBar />
@@ -51,8 +56,10 @@ export default function MainPage() {
           columnClassName="my-masonry-grid_column"
         >
           {
-            thumbnailImages.map((thumbnailImage) => (
-              <ImageCard thumbnailImage={thumbnailImage} />
+            mainPosts.map((post) => (
+              <div key={post.thumbnail} onClick={() => handleClickGoToPost(post.id)}>
+                <ImageCard post={post} />
+              </div>
             ))
           }
         </Masonry>
