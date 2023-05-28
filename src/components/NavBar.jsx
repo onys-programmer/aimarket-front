@@ -1,12 +1,12 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Button } from '@chakra-ui/react';
 import LogOutButton from './LogOutButton';
 import LogInButton from './LogInButton';
+import { useSelector } from 'react-redux';
 
 export default function NavBar() {
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const token = useSelector((state) => state.app.token);
   const navigate = useNavigate();
   console.log(token, "token");
   const handleClickGoHome = () => {

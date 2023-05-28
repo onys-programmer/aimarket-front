@@ -18,7 +18,7 @@ export default function MainPage() {
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
         page: 1, // 원하는 값으로 설정
-        perPage: 10, // 원하는 값으로 설정
+        perPage: 30, // 원하는 값으로 설정
       },
     });
     const posts = response.data.posts;
