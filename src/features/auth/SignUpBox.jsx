@@ -42,6 +42,8 @@ export default function SignUpBox() {
     } catch (error) {
       if (error.response.status === 302) {
         alert('이미 존재하는 이메일입니다.');
+      } else if (error.response.status === 422) {
+        alert('입력된 형식이 올바르지 않습니다.');
       } else {
         alert(error.message);
       }
