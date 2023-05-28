@@ -5,6 +5,7 @@ import { BASE_URL } from '../../services/api/api';
 import { useDispatch } from 'react-redux';
 import { updateUser, updateToken } from '../../app/slice';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function LoginBox() {
   const dispatch = useDispatch();
@@ -29,30 +30,39 @@ export default function LoginBox() {
   };
 
   const requestLogin = async (data) => {
-    const response = await fetch(`${BASE_URL}/users/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
-    dispatch(updateUser(result));
-    console.log(result);
-    dispatch(updateToken(result.token));
-    return result.token;
+    try {
+      const response = await axios.post(`${BASE_URL}/users/login`, data,
+        {
+          headers: { 'Content-Type': 'application/json' },
+        });
+      const result = await response.data;
+      if (response?.status === 200) {
+        dispatch(updateUser(result));
+        dispatch(updateToken(result.token));
+        alert('환영합니다. aimarket입니다.');
+        navigate('/');
+        return result.token;
+      } else if (response?.status === 404) {
+        alert('존재하지 않는 이메일입니다.');
+      } else {
+        alert(`로그인에 실패하였습니다.${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      if (error.response?.status === 401) {
+        alert('비밀번호가 일치하지 않습니다.');
+      } else if (error.response?.status === 404) {
+        alert('존재하지 않는 이메일입니다.');
+      } else {
+        alert(error.message);
+      }
+    }
   };
 
   const onClickLogin = async () => {
-    const token = requestLogin({
+    await requestLogin({
       email: emailInput,
       password: passwordInput,
     });
-    // go to main page
-    if (token) {
-      alert('환영합니다. aimarket입니다.', token);
-      navigate('/');
-    } else {
-      alert('로그인에 실패하였습니다.');
-    }
   };
 
   return (

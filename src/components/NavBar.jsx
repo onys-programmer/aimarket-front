@@ -17,11 +17,11 @@ export default function NavBar() {
             </S.SectionTitleEng>
           </S.NavItem>
         </a>
-        <a href='/posting'>
-          <li>
+        <li>
+          <a href='/posting'>
             <Button colorScheme='red' borderRadius={'24px'}>만들기</Button>
-          </li>
-        </a>
+          </a>
+        </li>
         {
           token
             ?
@@ -30,6 +30,11 @@ export default function NavBar() {
             </S.NavItemAuth>
             :
             <S.NavItemAuth>
+              <li>
+                <a href='/signup'>
+                  <Button colorScheme='gray' variant="outline" >회원 가입</Button>
+                </a>
+              </li>
               <LogInButton />
             </S.NavItemAuth>
         }
@@ -59,7 +64,9 @@ const S = {
     cursor: pointer;
   `,
   NavItemAuth: styled.li`
+    display: flex;
     margin-left: auto;
+    gap: 16px;
   `,
   SectionTitleEng: styled.h2`
     font-family: 'League Spartan', sans-serif;

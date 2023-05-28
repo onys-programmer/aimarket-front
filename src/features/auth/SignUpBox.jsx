@@ -2,13 +2,19 @@ import styled from '@emotion/styled';
 import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-export default function LoginBox() {
-
+export default function SignUpBox() {
+  const navigate = useNavigate();
+  const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordCheckInput, setPasswordCheckInput] = useState('');
 
+  const onChangeNameInput = (e) => {
+    setNameInput(e.target.value);
+  };
   const onChangeEmailInput = (e) => {
     setEmailInput(e.target.value);
   };
@@ -20,13 +26,26 @@ export default function LoginBox() {
   };
 
   const requestSignUp = async (data) => {
-    const response = await fetch(`${BASE_URL}/users/signup`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
-    alert('회원가입이 완료되었습니다.', result);
+    try {
+      const response = await axios.post(`${BASE_URL}/users/signup`,
+        data,
+        {
+          headers: { 'Content-Type': 'application/json' }
+        }
+      );
+      if (response.status === 201) {
+        alert('회원가입에 성공하였습니다.');
+        navigate('/login');
+      } else {
+        alert(`회원가입에 실패하였습니다. ${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      if (error.response.status === 302) {
+        alert('이미 존재하는 이메일입니다.');
+      } else {
+        alert(error.message);
+      }
+    }
   };
 
   const onSubmit = () => {
@@ -34,14 +53,20 @@ export default function LoginBox() {
       alert('비밀번호가 일치하지 않습니다.');
       return;
     } else {
-      requestSignUp({
+      const data = {
+        name: nameInput,
         email: emailInput,
         password: passwordInput,
-      });
+      };
+      requestSignUp(data);
     }
   };
 
-  console.log(emailInput, passwordInput);
+  const onEnterSubmit = (e) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  };
 
   return (
     <Card padding={'40px'} borderRadius={'8px'}>
@@ -53,9 +78,10 @@ export default function LoginBox() {
           <S.Title>회원 가입</S.Title>
         </S.TitleWrapper>
         <Stack spacing={3} width="100%">
+          <Input placeholder="이름" onChange={onChangeNameInput} />
           <Input placeholder="email" onChange={onChangeEmailInput} />
           <Input placeholder="비밀번호" type="password" onChange={onChangePasswordInput} />
-          <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordCheckInput} />
+          <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordCheckInput} onKeyDown={onEnterSubmit} />
         </Stack>
       </S.ContentWrapper>
       <S.ButtonWrapper>
