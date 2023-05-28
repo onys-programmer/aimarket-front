@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import PostingBox from '../features/post/PostingBox';
 import BackButton from '../components/BackButton';
 import { useSelector } from 'react-redux';

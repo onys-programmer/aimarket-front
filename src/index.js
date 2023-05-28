@@ -12,7 +12,7 @@ import styled from '@emotion/styled';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 import NavBar from './components/NavBar';
-import { updateToken } from './app/slice';
+import { updateToken, updateUser } from './app/slice';
 
 const S = {
   IndexContainer: styled.div`
@@ -22,12 +22,16 @@ const S = {
   `,
 };
 
-const token = localStorage.getItem('token'); // 로컬 스토리지 사용
+const token = localStorage.getItem('token');
+const user = JSON.parse(localStorage.getItem('user'));
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 if (token) {
-  store.dispatch(updateToken(token)); // 예시: Redux 액션을 통한 업데이트
+  store.dispatch(updateToken(token));
+}
+if (user) {
+  store.dispatch(updateUser(user));
 }
 
 root.render(

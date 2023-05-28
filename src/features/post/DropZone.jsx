@@ -1,8 +1,14 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
+import { updateUploadedPostImage } from "../../app/slice";
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+
 import styled from '@emotion/styled';
 
 export default function DropZone(props) {
+  const dispatch = useDispatch();
+
   const {
     acceptedFiles,
     fileRejections,
@@ -15,6 +21,14 @@ export default function DropZone(props) {
       'image/png': []
     }
   });
+
+  useEffect(() => {
+    if (acceptedFiles.length > 0) {
+      const formData = new FormData();
+      formData.append('image', acceptedFiles[0]);
+      dispatch(updateUploadedPostImage(formData));
+    }
+  }, [acceptedFiles]);
 
   const acceptedFileItems = acceptedFiles.map(file => (
     <li key={file.path}>

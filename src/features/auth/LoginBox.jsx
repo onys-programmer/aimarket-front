@@ -3,7 +3,7 @@ import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { useDispatch } from 'react-redux';
-import { updateToken } from '../../app/slice';
+import { updateUser, updateToken } from '../../app/slice';
 import { useNavigate } from 'react-router-dom';
 
 export default function LoginBox() {
@@ -35,7 +35,8 @@ export default function LoginBox() {
       body: JSON.stringify(data),
     });
     const result = await response.json();
-
+    dispatch(updateUser(result));
+    console.log(result);
     dispatch(updateToken(result.token));
     return result.token;
   };
