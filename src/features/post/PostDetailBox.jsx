@@ -52,7 +52,6 @@ export default function PostDetailBox({ postId }) {
       const result = await response.data;
 
       if (response?.status === 200) {
-        alert('댓글이 작성되었습니다.');
         setCommentInput('');
         fetchPost(postId);
       } else if (response?.status === 401) {
@@ -83,7 +82,7 @@ export default function PostDetailBox({ postId }) {
   }, [commentInput]);
 
   return (
-    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content">
+    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content" maxH="76vh">
       <Flex gap="30px">
         {
           post?.image ?
@@ -103,14 +102,14 @@ export default function PostDetailBox({ postId }) {
               <h3>댓글</h3>
             </S.CommentAreaTitle>
             <Comments comments={post?.comments} />
+            {
+              user?.userId &&
+              <Flex gap="8px" marginTop="auto">
+                <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} value={commentInput} />
+                <Button onClick={handleClickSubmitComment}>작성</Button>
+              </Flex>
+            }
           </S.CommentArea>
-          {
-            user?.userId &&
-            <Flex gap="8px" marginTop="auto">
-              <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} value={commentInput} />
-              <Button onClick={handleClickSubmitComment}>작성</Button>
-            </Flex>
-          }
         </S.TextArea>
       </Flex>
     </Card >
@@ -131,7 +130,7 @@ const S = {
   TextArea: styled.div`
     display: flex;
     flex-direction: column;
-    height: 66vh;
+    /* height: 66vh; */
     gap: 24px;
     width: 100%;
   `,
@@ -139,7 +138,7 @@ const S = {
     border-bottom: 2px solid #E2E8F0;
     padding: 8px 16px;
     > h3 {
-      font-size: 22px;
+      font-size: 2vh;
     };
   `,
   Description: styled.div`
@@ -178,7 +177,7 @@ const S = {
     border-bottom: 2px solid #E2E8F0;
     padding: 8px 16px;
     > h3 {
-      font-size: 18px;
+      font-size: 1.8vh;
     };
   `,
 };

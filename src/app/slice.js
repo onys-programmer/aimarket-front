@@ -5,6 +5,7 @@ const initialState = {
   token: "",
   mainPosts: [],
   uploadedPostImage: null,
+  currentPostComments: [],
 }
 
 export const slice = createSlice({
@@ -32,11 +33,22 @@ export const slice = createSlice({
     },
     updateUploadedPostImage: (state, action) => {
       state.uploadedPostImage = action.payload;
+    },
+    updateCurrentPostComments: (state, action) => {
+      state.currentPostComments = action.payload;
     }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { updateUser, deleteUser, updateToken, deleteToken, updateMainPosts, updateUploadedPostImage } = slice.actions;
+export const {
+  updateUser,
+  deleteUser,
+  updateToken,
+  deleteToken,
+  updateMainPosts,
+  updateUploadedPostImage,
+  updateCurrentPostComments
+} = slice.actions;
 
 export default slice.reducer;

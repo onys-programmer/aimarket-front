@@ -8,6 +8,7 @@ export default function DeletePostButton({ post }) {
   const navigate = useNavigate();
   const user = useSelector((state) => state.app.user);
   const [creator, setCreator] = useState('');
+  const isOwner = creator?.id === user?.userId;
 
   useEffect(() => {
     if (post) {
@@ -34,18 +35,20 @@ export default function DeletePostButton({ post }) {
   };
 
   const handleClickDeletePost = () => {
-    if (creator !== user?.userId) {
+    if (!isOwner) {
       alert('작성자만 삭제할 수 있습니다.');
       return;
     } else {
-      requestDeletePost();
+      if (window.confirm('정말 삭제하시겠습니까?')) {
+        requestDeletePost();
+      }
     }
   };
 
   return (
     <>
       {
-        creator === user?.userId ?
+        isOwner ?
           <Button colorScheme='red' width="fit-content" onClick={handleClickDeletePost}>
             삭제
           </Button>

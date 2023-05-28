@@ -16,7 +16,7 @@ import { updateToken, updateUser } from './app/slice';
 
 const S = {
   IndexContainer: styled.div`
-    height: fit-content;
+    height: 100vh;
     background-color: #f5f5f5;
     padding-top: 70px;
   `,
