@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card } from '@chakra-ui/react';
+import { Card, Input, Flex, Button } from '@chakra-ui/react';
 import styled from '@emotion/styled';
+import Comments from '../comment/Comments';
+import { useSelector } from 'react-redux';
 
 export default function PostDetailBox({ postId }) {
+  const user = useSelector((state) => state.app.user);
   const [post, setPost] = useState(null);
+  const [commentInput, setCommentInput] = useState('');
+  const [commentData, setCommentData] = useState({});
 
   const fetchPost = async (postId) => {
     const response = await axios.get(`${BASE_URL}/posts/${postId}`);
@@ -21,6 +26,57 @@ export default function PostDetailBox({ postId }) {
     fetchPost(postId);
   }, []);
 
+  const handleChangeCommentInput = (e) => {
+    setCommentInput(e.target.value);
+  };
+
+  const handleEnterSubmitComment = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmitComment(commentData);
+    }
+  };
+
+  const handleSubmitComment = async (data) => {
+    if (!commentInput) {
+      return;
+    }
+    try {
+      const response = await axios.post(`${BASE_URL}/comments`, data,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user?.token}`
+          }
+        });
+
+      const result = await response.data;
+
+      if (response?.status === 200) {
+        alert('댓글이 작성되었습니다.');
+        setCommentInput('');
+        fetchPost(postId);
+      } else if (response?.status === 401) {
+        alert('로그인 후 이용해주세요.');
+      } else {
+        alert(`댓글 작성에 실패하였습니다.${JSON.stringify(response)}`);
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const handleClickSubmitComment = () => {
+    handleSubmitComment(commentData);
+  };
+
+  useEffect(() => {
+    setCommentData({
+      content: commentInput,
+      creator: user?.userId,
+      postId: post?.id,
+    });
+  }, [commentInput]);
+
   return (
     <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content">
       <S.Stack>
@@ -31,8 +87,25 @@ export default function PostDetailBox({ postId }) {
             <S.SkeletonImage />
         }
         <S.TextArea>
-          <S.Title>{post?.title}</S.Title>
+          <S.Title><h3>{post?.title}</h3></S.Title>
           <S.Description>{post?.description}</S.Description>
+          <S.UserArea>
+            <S.ProfileImage src={post?.creator?.image} />
+            <S.UserName>{post?.creator?.name}</S.UserName>
+          </S.UserArea>
+          <S.CommentArea>
+            <S.CommentAreaTitle>
+              <h3>댓글</h3>
+            </S.CommentAreaTitle>
+            <Comments comments={post?.comments} />
+            {
+              user?.userId &&
+              <Flex gap="8px">
+                <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} />
+                <Button onClick={handleClickSubmitComment}>작성</Button>
+              </Flex>
+            }
+          </S.CommentArea>
         </S.TextArea>
       </S.Stack>
     </Card >
@@ -54,9 +127,52 @@ const S = {
     background-color: #E2E8F0;
   `,
   TextArea: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
     width: 100%;
     padding: 0 50px;
   `,
-  Title: styled.div``,
-  Description: styled.div``,
+  Title: styled.div`
+    border-bottom: 2px solid #E2E8F0;
+    padding: 8px 16px;
+    > h3 {
+      font-size: 22px;
+    };
+  `,
+  Description: styled.div`
+    height: fit-content;
+    border-radius: 16px;
+    padding: 16px;
+  `,
+  UserArea: styled.div`
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 8px;
+    padding: 0 8px;
+  `,
+  ProfileImage: styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  `,
+  UserName: styled.div`
+    padding: 8px;
+    display: flex;
+    align-items: center;
+  `,
+  CommentArea: styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 4px 8px;
+  `,
+  CommentAreaTitle: styled.div`
+    border-bottom: 2px solid #E2E8F0;
+    padding: 8px 16px;
+    > h3 {
+      font-size: 18px;
+    };
+  `,
 };
