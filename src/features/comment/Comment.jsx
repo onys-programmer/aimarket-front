@@ -55,5 +55,6 @@ const S = {
     display: flex;
     align-items: center;
     overflow: auto;
+    max-height: 250px;
   `,
 }

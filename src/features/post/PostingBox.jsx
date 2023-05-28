@@ -51,6 +51,10 @@ export default function PostingBox() {
       alert('로그인이 필요합니다.');
       return;
     }
+    if (!acceptedFiles[0]) {
+      alert('이미지를 첨부해주세요.');
+      return;
+    }
     if (!titleInput || !contentInput) {
       alert('제목과 내용을 입력해주세요.');
       return;
@@ -61,6 +65,21 @@ export default function PostingBox() {
     });
   };
 
+  useEffect(() => {
+    if (titleInput.length > 50) {
+      alert('제목은 50자 이내로 작성해주세요.');
+      setTitleInput(titleInput.slice(0, 50));
+      return;
+    }
+  }, [titleInput]);
+
+  useEffect(() => {
+    if (contentInput.length > 500) {
+      alert('내용은 500자 이내로 작성해주세요.');
+      setContentInput(contentInput.slice(0, 500));
+      return;
+    }
+  }, [contentInput]);
 
   const {
     acceptedFiles,
@@ -118,8 +137,8 @@ export default function PostingBox() {
           </section>
         </S.DropZone>
         <Stack width="100%" height="100%">
-          <Input placeholder='제목' size="lg" onChange={handleChangeTitle} />
-          <Textarea placeholder='내용' height="100%" onChange={handleChangeContent} />
+          <Input placeholder='제목' size="lg" onChange={handleChangeTitle} value={titleInput} />
+          <Textarea placeholder='내용' height="100%" onChange={handleChangeContent} value={contentInput} />
           <Button colorScheme='red' onClick={handleSubmit}>
             저장
           </Button>

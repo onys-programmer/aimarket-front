@@ -70,6 +70,11 @@ export default function PostDetailBox({ postId }) {
   };
 
   useEffect(() => {
+    if (commentInput.length > 200) {
+      alert('댓글은 200자 이내로 작성해주세요.');
+      setCommentInput(commentInput.slice(0, 200));
+      return;
+    }
     setCommentData({
       content: commentInput,
       creator: user?.userId,
@@ -79,7 +84,7 @@ export default function PostDetailBox({ postId }) {
 
   return (
     <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content">
-      <S.Stack>
+      <Flex gap="30px">
         {
           post?.image ?
             <S.Image src={post?.image} />
@@ -98,24 +103,21 @@ export default function PostDetailBox({ postId }) {
               <h3>댓글</h3>
             </S.CommentAreaTitle>
             <Comments comments={post?.comments} />
-            {
-              user?.userId &&
-              <Flex gap="8px">
-                <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} />
-                <Button onClick={handleClickSubmitComment}>작성</Button>
-              </Flex>
-            }
           </S.CommentArea>
+          {
+            user?.userId &&
+            <Flex gap="8px" marginTop="auto">
+              <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} value={commentInput} />
+              <Button onClick={handleClickSubmitComment}>작성</Button>
+            </Flex>
+          }
         </S.TextArea>
-      </S.Stack>
+      </Flex>
     </Card >
   );
 };
 
 const S = {
-  Stack: styled.div`
-    display: flex;
-  `,
   Image: styled.img`
     height: 70vh;
     border-radius: 16px;
@@ -131,7 +133,6 @@ const S = {
     flex-direction: column;
     gap: 24px;
     width: 100%;
-    padding: 0 50px;
   `,
   Title: styled.div`
     border-bottom: 2px solid #E2E8F0;
@@ -165,6 +166,8 @@ const S = {
   CommentArea: styled.div`
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
     gap: 8px;
     padding: 4px 8px;
   `,
