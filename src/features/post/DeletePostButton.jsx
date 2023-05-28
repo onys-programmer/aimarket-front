@@ -1,12 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { Button } from '@chakra-ui/react';
 
 export default function DeletePostButton({ post }) {
   const navigate = useNavigate();
   const user = useSelector((state) => state.app.user);
-  const { creator } = post;
+  const [creator, setCreator] = useState('');
+
+  useEffect(() => {
+    if (post) {
+      setCreator(post.creator);
+    }
+  }, [post]);
 
   const requestDeletePost = async () => {
     const token = localStorage.getItem('token');
@@ -27,7 +34,7 @@ export default function DeletePostButton({ post }) {
   };
 
   const handleClickDeletePost = () => {
-    if (creator !== user.userId) {
+    if (creator !== user?.userId) {
       alert('작성자만 삭제할 수 있습니다.');
       return;
     } else {
@@ -38,7 +45,7 @@ export default function DeletePostButton({ post }) {
   return (
     <>
       {
-        creator === user.userId ?
+        creator === user?.userId ?
           <Button colorScheme='red' width="fit-content" onClick={handleClickDeletePost}>
             삭제
           </Button>
