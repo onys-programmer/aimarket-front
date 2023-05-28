@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import NavBar from '../components/NavBar';
 import BackButton from '../components/BackButton';
 import { useParams } from 'react-router-dom';
 import PostDetailBox from '../features/post/PostDetailBox';
@@ -11,7 +10,6 @@ export default function PostDetailPage() {
 
   return (
     <S.PostDetailPage>
-      <NavBar />
       <S.Container>
         <S.WithBackWrapper>
           <BackButton url={"/"} />
@@ -24,6 +22,7 @@ export default function PostDetailPage() {
 
 const S = {
   PostDetailPage: styled.div`
+    /* margin-top: 70px; */
     display: flex;
     flex-direction: column;
   `,

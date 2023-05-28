@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { Button } from '@chakra-ui/react';
 import LogOutButton from './LogOutButton';
@@ -7,27 +6,22 @@ import { useSelector } from 'react-redux';
 
 export default function NavBar() {
   const token = useSelector((state) => state.app.token);
-  const navigate = useNavigate();
-  console.log(token, "token");
-  const handleClickGoHome = () => {
-    navigate('/');
-  };
-
-  const handleClickGoPosting = () => {
-    navigate('/posting');
-  };
 
   return (
     <>
       <S.Container>
-        <S.NavItem onClick={handleClickGoHome}>
-          <S.SectionTitleEng>
-            aimarket
-          </S.SectionTitleEng>
-        </S.NavItem>
-        <li>
-          <Button colorScheme='red' borderRadius={'24px'} onClick={handleClickGoPosting}>만들기</Button>
-        </li>
+        <a href='/'>
+          <S.NavItem>
+            <S.SectionTitleEng>
+              aimarket
+            </S.SectionTitleEng>
+          </S.NavItem>
+        </a>
+        <a href='/posting'>
+          <li>
+            <Button colorScheme='red' borderRadius={'24px'}>만들기</Button>
+          </li>
+        </a>
         {
           token
             ?
@@ -46,6 +40,9 @@ export default function NavBar() {
 
 const S = {
   Container: styled.ul`
+    position: fixed;
+    top: 0;
+    z-index: 100;
     width: 100%;
     height: 70px; /* 104px */
     padding: 40px;

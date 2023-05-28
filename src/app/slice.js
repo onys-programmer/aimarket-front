@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  token: null,
+  token: "",
   mainPosts: [],
 }
 
@@ -14,7 +14,7 @@ export const slice = createSlice({
       localStorage.setItem('token', action.payload);
     },
     deleteToken: (state) => {
-      state.token = null;
+      state.token = "";
     },
     updateMainPosts: (state, action) => {
       state.mainPosts = action.payload;

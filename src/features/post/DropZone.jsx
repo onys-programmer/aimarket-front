@@ -34,9 +34,9 @@ export default function DropZone(props) {
   ));
 
   return (
-    <S.Container>
-      <section className="container">
-        <div {...getRootProps({ className: 'dropzone' })}>
+    <S.Container {...getRootProps({ className: 'dropzone' })}>
+      <section className="container" >
+        <div>
           <input {...getInputProps()} />
           <p>Drag 'n' drop some files here, or click to select files</p>
           <em>(Only *.jpg, *.jpeg and *.png images will be accepted)</em>
@@ -63,5 +63,6 @@ const S = {
     color: #7d7d7d;
     border-radius: 16px;
     padding: 30px;
+    cursor: pointer;
   `,
 };

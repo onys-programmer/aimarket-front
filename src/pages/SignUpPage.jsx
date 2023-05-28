@@ -11,6 +11,7 @@ export default function signUpPage() {
 
 const S = {
   Container: styled.div`
+    margin-top: 70px;
     height: 100vh;
     display: flex;
     flex-direction: column;

@@ -11,25 +11,26 @@ import styled from '@emotion/styled';
 
 import { store } from './app/store'
 import { Provider } from 'react-redux'
+import NavBar from './components/NavBar';
 
 const S = {
-  Container: styled.div`
+  IndexContainer: styled.div`
     height: fit-content;
-    background-color: #f5f5f5;  
+    background-color: #f5f5f5;
+    padding-top: 70px;
   `,
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <ChakraProvider>
-      <Provider store={store}>
-        <S.Container>
-          <RouterProvider router={router} />
-        </S.Container>
-      </Provider>
-    </ChakraProvider>
-  </React.StrictMode>
+  <ChakraProvider>
+    <Provider store={store}>
+      <NavBar />
+      <S.IndexContainer >
+        <RouterProvider router={router} style={{ marginTop: "70px" }} />
+      </S.IndexContainer>
+    </Provider>
+  </ChakraProvider>
 );
 
 

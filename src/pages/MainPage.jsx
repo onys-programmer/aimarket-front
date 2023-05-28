@@ -1,4 +1,3 @@
-import NavBar from '../components/NavBar';
 import styled from '@emotion/styled';
 import ImageCard from '../components/ImageCard.jsx';
 import Masonry from 'react-masonry-css';
@@ -48,7 +47,6 @@ export default function MainPage() {
 
   return (
     <>
-      <NavBar />
       <S.Container>
         <Masonry
           breakpointCols={breakpointColumnsObj}
@@ -63,13 +61,14 @@ export default function MainPage() {
             ))
           }
         </Masonry>
-      </S.Container>
+      </S.Container >
     </>
   );
 }
 
 const S = {
   Container: styled.div`
+    padding-top: 10px;
     width: 100%;
     max-width: 1740px;
     margin: 0 auto;
