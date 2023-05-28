@@ -12,6 +12,7 @@ import styled from '@emotion/styled';
 import { store } from './app/store'
 import { Provider } from 'react-redux'
 import NavBar from './components/NavBar';
+import { updateToken } from './app/slice';
 
 const S = {
   IndexContainer: styled.div`
@@ -21,7 +22,14 @@ const S = {
   `,
 };
 
+const token = localStorage.getItem('token'); // 로컬 스토리지 사용
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+if (token) {
+  store.dispatch(updateToken(token)); // 예시: Redux 액션을 통한 업데이트
+}
+
 root.render(
   <ChakraProvider>
     <Provider store={store}>

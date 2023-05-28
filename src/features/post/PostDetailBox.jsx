@@ -24,7 +24,12 @@ export default function PostDetailBox({ postId }) {
   return (
     <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content">
       <S.Stack>
-        <S.Image src={post?.thumbnail} />
+        {
+          post?.image ?
+            <S.Image src={post?.image} />
+            :
+            <S.SkeletonImage />
+        }
         <S.TextArea>
           <S.Title>{post?.title}</S.Title>
           <S.Description>{post?.description}</S.Description>
@@ -41,6 +46,12 @@ const S = {
   Image: styled.img`
     height: 70vh;
     border-radius: 16px;
+  `,
+  SkeletonImage: styled.div`
+    height: 70vh;
+    width: 100%;
+    border-radius: 16px;
+    background-color: #E2E8F0;
   `,
   TextArea: styled.div`
     width: 100%;
