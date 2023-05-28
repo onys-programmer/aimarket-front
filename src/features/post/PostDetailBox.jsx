@@ -131,6 +131,7 @@ const S = {
   TextArea: styled.div`
     display: flex;
     flex-direction: column;
+    height: 66vh;
     gap: 24px;
     width: 100%;
   `,
@@ -143,6 +144,8 @@ const S = {
   `,
   Description: styled.div`
     height: fit-content;
+    max-height: 30%;
+    overflow: auto;
     border-radius: 16px;
     padding: 16px;
   `,
