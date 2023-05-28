@@ -4,12 +4,12 @@ import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 import { useDropzone } from 'react-dropzone';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 import styled from '@emotion/styled';
 
 export default function PostingBox() {
   const token = localStorage.getItem('token');
-  const [imageFile, setImageFile] = useState(null);
   const [titleInput, setTitleInput] = useState('');
   const [contentInput, setContentInput] = useState('');
   const user = useSelector((state) => state.app.user);
@@ -23,29 +23,26 @@ export default function PostingBox() {
     setContentInput(e.target.value);
   };
 
-  const postData = {
-    title: titleInput,
-    description: contentInput,
-    image: imageFile,
-    creator: user?.userId,
-  };
+  const requestPosting = async () => {
+    const formData = new FormData();
+    formData.append('image', acceptedFiles[0]);
+    formData.append('title', titleInput);
+    formData.append('description', contentInput);
+    formData.append('creator', user.userId);
 
-  const requestPosting = async (data) => {
-    const response = await fetch(`${BASE_URL}/posts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    });
-    const result = await response.json();
-    if (response.ok) {
-      navigate('/');
-      return result;
-    } else {
-      alert(result.message);
-      return false;
+    try {
+      const response = await axios.post(`${BASE_URL}/posts`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.status === 200) {
+        alert('게시글이 등록되었습니다.');
+        navigate('/');
+      }
+    } catch (error) {
+      alert(error.message);
     }
   };
 
@@ -78,13 +75,11 @@ export default function PostingBox() {
     }
   });
 
-  useEffect(() => {
-    if (acceptedFiles.length > 0) {
-      const formData = new FormData();
-      formData.append('image', acceptedFiles[0]);
-      setImageFile(formData);
-    }
-  }, [acceptedFiles]);
+  // useEffect(() => {
+  //   if (acceptedFiles.length > 0) {
+  //     setImageFile(acceptedFiles[0]);
+  //   }
+  // }, [acceptedFiles]);
 
   const acceptedFileItems = acceptedFiles.map(file => (
     <li key={file.path}>
