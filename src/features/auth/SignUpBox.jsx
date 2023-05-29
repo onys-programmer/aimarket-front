@@ -4,11 +4,13 @@ import { useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useEffect } from 'react';
 
 export default function SignUpBox() {
   const navigate = useNavigate();
   const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
+  const [memorableDateInput, setMemorableDateInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [passwordCheckInput, setPasswordCheckInput] = useState('');
 
@@ -51,6 +53,30 @@ export default function SignUpBox() {
   };
 
   const onSubmit = () => {
+    if (!nameInput) {
+      alert('이름을 입력해주세요.');
+      return;
+    }
+    if (!emailInput) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+    if (emailInput.indexOf('@') === -1) {
+      alert('이메일 형식이 올바르지 않습니다.');
+      return;
+    }
+    if (memorableDateInput.length === 0) {
+      alert('기억에 남는 날짜를 입력해주세요. 비밀번호 찾기에 사용됩니다.');
+      return;
+    }
+    if (!memorableDateInput.match(/^\d{8}$/)) {
+      alert('기억에 남는 날짜는 8자리 숫자로 입력해주세요. (공백, 특수문자 제외)');
+      return;
+    };
+    if (passwordInput.length < 6) {
+      alert('비밀번호는 6자리 이상이어야 합니다.');
+      return;
+    }
     if (passwordInput !== passwordCheckInput) {
       alert('비밀번호가 일치하지 않습니다.');
       return;
@@ -59,6 +85,7 @@ export default function SignUpBox() {
         name: nameInput,
         email: emailInput,
         password: passwordInput,
+        memorableDate: memorableDateInput
       };
       requestSignUp(data);
     }
@@ -69,6 +96,18 @@ export default function SignUpBox() {
       onSubmit();
     }
   };
+
+  const onChangeMemorableDateInput = (e) => {
+    setMemorableDateInput(e.target.value);
+  };
+
+  useEffect(() => {
+    if (memorableDateInput.length > 8) {
+      if (window.confirm('기억에 남는 날짜는 8자리 숫자로 입력해주세요.')) {
+        setMemorableDateInput(memorableDateInput.substring(0, 8));
+      }
+    }
+  }, [memorableDateInput])
 
   return (
     <Card padding={'40px'} borderRadius={'8px'}>
@@ -82,6 +121,10 @@ export default function SignUpBox() {
         <Stack spacing={3} width="100%">
           <Input placeholder="이름" onChange={onChangeNameInput} />
           <Input placeholder="email" onChange={onChangeEmailInput} />
+          <Stack spacing={1}>
+            <Input type="number" placeholder="기억에 남는 날짜 ex)19990101" onChange={onChangeMemorableDateInput} value={memorableDateInput} />
+            <S.MemorableDateNoti>* 비밀번호 찾기에 사용됩니다.</S.MemorableDateNoti>
+          </Stack>
           <Input placeholder="비밀번호" type="password" onChange={onChangePasswordInput} />
           <Input placeholder="비밀번호 확인" type="password" onChange={onChangePasswordCheckInput} onKeyDown={onEnterSubmit} />
         </Stack>
@@ -177,5 +220,9 @@ const S = {
     flex-wrap: nowrap;
     gap: 0;
     border-radius: 0px 0px 0px 0px;
+  `,
+  MemorableDateNoti: styled.p`
+    font-size: 1vh;
+    color: #555555;
   `,
 };
