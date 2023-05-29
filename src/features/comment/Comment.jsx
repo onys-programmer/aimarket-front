@@ -72,21 +72,21 @@ export default function Comment({ comment, forList = false }) {
   return (
     <S.Container>
       <Avatar src={creator?.image} size="sm" />
-      <S.Item>
-        <S.CreatorName>
+      <S.CreatorName>
+        <S.Item>
           <p>{creator?.name}</p>
-        </S.CreatorName>
-      </S.Item>
-      <S.Item>
-        <S.CommentContent>
+        </S.Item>
+      </S.CreatorName>
+      <S.CommentContent>
+        <S.Item>
           <p>{comment?.content}</p>
-        </S.CommentContent>
-      </S.Item>
-      <S.Item>
-        <S.UpdatedAt>
+        </S.Item>
+      </S.CommentContent>
+      <S.UpdatedAt>
+        <S.Item>
           <p>{updatedAt || createdAt}</p>
-        </S.UpdatedAt>
-      </S.Item>
+        </S.Item>
+      </S.UpdatedAt>
       {
         !forList && isOwner && (
           <S.DeleteBtnWrapper>
@@ -101,7 +101,7 @@ export default function Comment({ comment, forList = false }) {
 const S = {
   Container: styled.div`
     display: flex;
-    justify-content: start;
+    justify-content: space-beween;
     gap: 12px;
     width: 100%;
   `,
@@ -121,6 +121,7 @@ const S = {
     /* padding: 3px; */
     margin-left: 8px;
     overflow: auto;
+    width: 100%;
     max-width: 500px;
     max-height: 250px;
     align-items: start;
@@ -131,16 +132,18 @@ const S = {
     }
   `,
   UpdatedAt: styled.div`
+    padding-top: 0.2vh;
+    width: 15%;
     align-items: start;
-    > p {
-      font-size: 1.8vh;
+    p {
+      font-size: 1.4vh;
       color: #666666;
     }
   `,
   DeleteBtnWrapper: styled.div`
     display: flex;
     align-items: start;
-    padding: 0.9vh;
+    padding: 0.7vh;
     label: delete-btn-wrapper;
   `,
 }

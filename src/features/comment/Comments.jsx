@@ -17,17 +17,20 @@ export default function Comments({ comments, forList = false }) {
   };
 
   return (
-    <Stack gap="8px" maxH={forList ? "auto" : "15vh"} overflow="auto">
+    <Stack gap="8px" height="100%" minH={forList ? "15vh" : "auto"} overflow="auto">
       {
         comments?.map((comment) => {
           return (
-            <S.CommentRow onClick={() => handleClickGoToPost(comment)}>
+            forList ?
+              <S.CommentRow onClick={() => handleClickGoToPost(comment)}>
+                <Comment comment={comment} forList={forList} />
+              </S.CommentRow>
+              :
               <Comment comment={comment} forList={forList} />
-            </S.CommentRow>
           );
         })
       }
-    </Stack>
+    </Stack >
   );
 }
 

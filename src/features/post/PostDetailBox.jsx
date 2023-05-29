@@ -101,7 +101,9 @@ export default function PostDetailBox({ postId }) {
             <S.CommentAreaTitle>
               <h3>댓글</h3>
             </S.CommentAreaTitle>
-            <Comments comments={post?.comments} />
+            <S.CommentListArea>
+              <Comments comments={post?.comments} />
+            </S.CommentListArea>
             {
               user?.userId &&
               <Flex gap="8px" marginTop="auto">
@@ -170,8 +172,13 @@ const S = {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
+    height: 100%;
+    max-height: 40%;
     gap: 8px;
     padding: 4px 8px;
+  `,
+  CommentListArea: styled.div`
+    height: 100%;
   `,
   CommentAreaTitle: styled.div`
     border-bottom: 2px solid #E2E8F0;
