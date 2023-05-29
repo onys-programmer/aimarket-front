@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { Input, Button, Stack } from "@chakra-ui/react";
+import { Input, Flex, Button, Stack } from "@chakra-ui/react";
 import axios from "axios";
 import { BASE_URL } from "../../services/api/api";
 import styled from "@emotion/styled";
@@ -60,7 +60,7 @@ export default function ChangePasswordBox() {
 
   const requestChangePassword = async (data) => {
     try {
-      const response = await axios.patch(`${BASE_URL}/users/change-password`, data,
+      const response = await axios.patch(`${BASE_URL}/users/`, data,
         {
           headers: {
             'Authorization': 'Bearer ' + user?.token,
@@ -112,49 +112,66 @@ export default function ChangePasswordBox() {
     }
   };
 
+  const handleClickTryToChangePassword = () => {
+    setPageState("tryToChange");
+  };
+
   return (
     <S.Container>
       {
         pageState === "default" &&
-        <p>비밀번호 변경</p>
+        (
+          <S.ChangePasswordButton onClick={handleClickTryToChangePassword}>
+            <p>비밀번호 변경</p>
+          </S.ChangePasswordButton>
+        )
       }
       {
         pageState === "tryToChange" &&
-        <>
-          <Input
-            type="password"
-            placeholder="비밀번호"
-            onChange={handleChangePasswordInput}
-          />
-          <Button onClick={handleClickSubmitPassword}>
-            입력
-          </Button>
-        </>
+        (
+          <Flex gap={2}>
+            <Input
+              type="password"
+              placeholder="비밀번호"
+              onChange={handleChangePasswordInput}
+            />
+            <Button onClick={handleClickSubmitPassword}>
+              입력
+            </Button>
+          </Flex>
+        )
       }
       {
         pageState === "changing" &&
-        <Stack>
-          <Input
-            type="password"
-            placeholder="새 비밀번호"
-            onChange={handleChangeNewPasswordInput}
-          />
-          <Input
-            type="password"
-            placeholder="새 비밀번호 확인"
-            onChange={handleChangeNewPasswordCheckInput}
-            onKeyDown={handleEnterSubmitNewPassword}
-          />
-          <Button onClick={handleClickSubmitNewPassword}>
-            변경
-          </Button>
-        </Stack>
-
+        (
+          <Stack>
+            <Input
+              type="password"
+              placeholder="새 비밀번호"
+              onChange={handleChangeNewPasswordInput}
+            />
+            <Input
+              type="password"
+              placeholder="새 비밀번호 확인"
+              onChange={handleChangeNewPasswordCheckInput}
+              onKeyDown={handleEnterSubmitNewPassword}
+            />
+            <Button onClick={handleClickSubmitNewPassword}>
+              변경
+            </Button>
+          </Stack>
+        )
       }
-    </S.Container>
+    </S.Container >
   );
-}
+};
 
 const S = {
   Container: styled.div``,
-}
+  ChangePasswordButton: styled.div`
+    &:hover {
+      cursor: pointer;
+      color: #279df4;
+    },
+  `,
+};
