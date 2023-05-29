@@ -29,7 +29,7 @@ export default function FindPasswordBox() {
         }
       );
       if (response.status === 200) {
-        alert(`비밀번호는 ${response.data.password} 입니다.`);
+        alert(`새 비밀번호는 ${response.data.password} 입니다.`);
       } else {
         alert(`올바른 정보인지 다시 확인해주세요. ${JSON.stringify(response)}`);
       }

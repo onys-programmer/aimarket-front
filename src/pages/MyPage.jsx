@@ -6,7 +6,7 @@ import PostsBox from "../features/my-page/PostsBox";
 import CommentsBox from "../features/my-page/CommentsBox";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
-
+import ChangePasswordBox from "../features/my-page/ChangePasswordBox";
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ export default function MyPage() {
         <S.Container>
           <Stack alignItems="center" gap="20px">
             <ProfileBox />
+            <ChangePasswordBox />
             <div onClick={handleClickGoToUserPosts}>
               <PostsBox />
             </div>
