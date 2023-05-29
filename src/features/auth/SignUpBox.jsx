@@ -57,6 +57,10 @@ export default function SignUpBox() {
       alert('이름을 입력해주세요.');
       return;
     }
+    if (nameInput.length > 16) {
+      alert('이름은 16자 이하로 입력해주세요.');
+      return;
+    }
     if (!emailInput) {
       alert('이메일을 입력해주세요.');
       return;
@@ -100,6 +104,14 @@ export default function SignUpBox() {
   const onChangeMemorableDateInput = (e) => {
     setMemorableDateInput(e.target.value);
   };
+
+  useEffect(() => {
+    if (nameInput.length > 16) {
+      if (window.confirm('이름은 16자 이하로 입력해주세요.')) {
+        setNameInput(nameInput.substring(0, 16));
+      }
+    }
+  }, [nameInput])
 
   useEffect(() => {
     if (memorableDateInput.length > 8) {

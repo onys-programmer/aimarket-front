@@ -6,6 +6,7 @@ import PostingPage from './pages/PostingPage';
 import PostDetailPage from './pages/PostDetailPage';
 import MyPage from './pages/MyPage';
 import UserPostsPage from './pages/UserPostsPage';
+import FindPasswordPage from './pages/FindPasswordPage';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: `/:userId/posts`,
     element: <UserPostsPage />,
+  },
+  {
+    path: '/find-password',
+    element: <FindPasswordPage />,
   }
 ]);
 

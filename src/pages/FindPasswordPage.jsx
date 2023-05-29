@@ -1,13 +1,12 @@
-import LoginBox from '../features/auth/LoginBox';
-import styled from '@emotion/styled';
+import FindPasswordBox from "../features/auth/FindPasswordBox"
+import styled from "@emotion/styled"
 
-export default function LoginPage() {
+export default function FindPassWordpage() {
   return (
     <S.Container>
-      {/* <MainTitle /> */}
-      <LoginBox />
+      <FindPasswordBox />
     </S.Container>
-  );
+  )
 }
 
 const S = {

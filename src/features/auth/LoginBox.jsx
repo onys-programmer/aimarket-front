@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { updateUser, updateToken } from '../../app/slice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import FindPasswordButton from '../../components/FindPasswordButton';
 
 export default function LoginBox() {
   const dispatch = useDispatch();
@@ -84,6 +85,7 @@ export default function LoginBox() {
           LOG IN
         </Button>
       </S.ButtonWrapper>
+      <FindPasswordButton />
     </Card >
   );
 }
