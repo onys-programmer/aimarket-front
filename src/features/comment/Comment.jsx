@@ -9,6 +9,15 @@ import DeleteCommentButton from "./DeleteCommentButton";
 export default function Comment({ comment }) {
   const [creator, setCreator] = useState(null);
   const user = useSelector((state) => state.app.user);
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(() => {
+    if (comment) {
+      const isOwner = creator?._id === user?.userId && creator !== null && user !== null;
+      setIsOwner(isOwner);
+      console.log(creator, user, isOwner, "isOwner")
+    }
+  }, [comment, creator, user]);
 
   const fetchUser = async (userId) => {
     try {
@@ -63,9 +72,13 @@ export default function Comment({ comment }) {
       <S.CommentContent>
         <p>{comment?.content}</p>
       </S.CommentContent>
-      <S.DeleteBtnWrapper>
-        <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
-      </S.DeleteBtnWrapper>
+      {
+        isOwner && (
+          <S.DeleteBtnWrapper>
+            <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
+          </S.DeleteBtnWrapper>
+        )
+      }
     </S.Container>
   );
 };
