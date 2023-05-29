@@ -17,7 +17,7 @@ export default function Comments({ comments, forList = false }) {
   };
 
   return (
-    <Stack gap="8px" maxH="15vh" overflow="auto">
+    <Stack gap="8px" maxH={forList ? "auto" : "15vh"} overflow="auto">
       {
         comments?.map((comment) => {
           return (

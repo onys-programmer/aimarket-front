@@ -46,6 +46,7 @@ export default function MyPage() {
 const S = {
   Container: styled.div`
     padding-top: 70px;
+    padding-bottom: 70px;
     width: 100%;
     max-width: 1740px;
     margin: 0 auto;

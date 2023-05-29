@@ -121,6 +121,7 @@ const S = {
     /* padding: 3px; */
     margin-left: 8px;
     overflow: auto;
+    max-width: 500px;
     max-height: 250px;
     align-items: start;
 
