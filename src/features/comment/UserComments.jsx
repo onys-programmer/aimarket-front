@@ -23,6 +23,6 @@ export default function UserComments({ userId }) {
   }, [userId]);
 
   return (
-    <Comments comments={comments} />
+    <Comments comments={comments} forList={true} />
   );
 };

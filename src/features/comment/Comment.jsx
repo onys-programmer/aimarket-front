@@ -68,6 +68,7 @@ export default function Comment({ comment, forList = false }) {
   const createdAt = parseRelativeDate(comment?.createdAt);
   const updatedAt = comment?.updatedAt ? parseRelativeDate(comment?.updatedAt) : null;
 
+
   return (
     <S.Container>
       <Avatar src={creator?.image} size="sm" />
@@ -87,7 +88,7 @@ export default function Comment({ comment, forList = false }) {
         </S.UpdatedAt>
       </S.Item>
       {
-        forList && isOwner && (
+        !forList && isOwner && (
           <S.DeleteBtnWrapper>
             <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
           </S.DeleteBtnWrapper>
