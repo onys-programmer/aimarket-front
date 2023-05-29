@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Button } from '@chakra-ui/react';
+import { Button, Flex } from '@chakra-ui/react';
 import LogOutButton from './LogOutButton';
 import LogInButton from './LogInButton';
 import { useSelector } from 'react-redux';
@@ -25,9 +25,20 @@ export default function NavBar() {
         {
           token
             ?
-            <S.NavItemAuth>
-              <LogOutButton />
-            </S.NavItemAuth>
+            <Flex alignItems="center" gap="20px" marginLeft="auto">
+              <a href='/mypage'>
+                <S.MyPageIcon>
+                  <S.NavItem>
+                    <S.SectionTitleEng>
+                      my page
+                    </S.SectionTitleEng>
+                  </S.NavItem>
+                </S.MyPageIcon>
+              </a>
+              <S.NavItemAuth>
+                <LogOutButton />
+              </S.NavItemAuth>
+            </Flex>
             :
             <S.NavItemAuth>
               <li>
@@ -75,5 +86,8 @@ const S = {
   ParagraphSmallEng: styled.p`
     font-family: 'League Spartan', sans-serif;
     font-size: 14px;
+  `,
+  MyPageIcon: styled.div`
+    margin-left: auto;
   `,
 }

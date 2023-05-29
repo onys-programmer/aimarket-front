@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import PostingPage from './pages/PostingPage';
 import PostDetailPage from './pages/PostDetailPage';
+import MyPage from './pages/MyPage';
+import UserPostsPage from './pages/UserPostsPage';
 
 const router = createBrowserRouter([
   {
@@ -29,6 +31,14 @@ const router = createBrowserRouter([
   {
     path: '/post/:postId',
     element: <PostDetailPage />,
+  },
+  {
+    path: '/mypage',
+    element: <MyPage />,
+  },
+  {
+    path: `/:userId/posts`,
+    element: <UserPostsPage />,
   }
 ]);
 

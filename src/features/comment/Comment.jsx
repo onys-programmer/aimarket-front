@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../services/api/api";
 import DeleteCommentButton from "./DeleteCommentButton";
+import { parseRelativeDate } from "../../utils/util";
 
-export default function Comment({ comment }) {
+export default function Comment({ comment, forList = false }) {
   const [creator, setCreator] = useState(null);
   const user = useSelector((state) => state.app.user);
   const [isOwner, setIsOwner] = useState(false);
@@ -15,7 +16,7 @@ export default function Comment({ comment }) {
     if (comment) {
       const isOwner = creator?._id === user?.userId && creator !== null && user !== null;
       setIsOwner(isOwner);
-      console.log(creator, user, isOwner, "isOwner")
+      // console.log(creator, user, isOwner, "isOwner")
     }
   }, [comment, creator, user]);
 
@@ -62,18 +63,31 @@ export default function Comment({ comment }) {
   const handleClickDeleteComment = (commentId) => {
     requestDeleteComment(commentId);
   };
+  console.log(comment);
+
+  const createdAt = parseRelativeDate(comment?.createdAt);
+  const updatedAt = comment?.updatedAt ? parseRelativeDate(comment?.updatedAt) : null;
 
   return (
     <S.Container>
       <Avatar src={creator?.image} size="sm" />
-      <S.CreatorName>
-        <p>{creator?.name}</p>
-      </S.CreatorName>
-      <S.CommentContent>
-        <p>{comment?.content}</p>
-      </S.CommentContent>
+      <S.Item>
+        <S.CreatorName>
+          <p>{creator?.name}</p>
+        </S.CreatorName>
+      </S.Item>
+      <S.Item>
+        <S.CommentContent>
+          <p>{comment?.content}</p>
+        </S.CommentContent>
+      </S.Item>
+      <S.Item>
+        <S.UpdatedAt>
+          <p>{updatedAt || createdAt}</p>
+        </S.UpdatedAt>
+      </S.Item>
       {
-        isOwner && (
+        forList && isOwner && (
           <S.DeleteBtnWrapper>
             <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
           </S.DeleteBtnWrapper>
@@ -90,25 +104,36 @@ const S = {
     gap: 12px;
     width: 100%;
   `,
-  CreatorName: styled.div`
-    padding: 3px;
+  Item: styled.div`
+    padding-top: 0.4vh;
     display: flex;
     align-items: start;
-    > p: {
-      font-size: 1vh;
-      color: #EBEBEB;
+  `,
+  CreatorName: styled.div`
+    /* padding: 3px; */
+    > p {
+      font-size: 1.8vh;
+      color: #666666;
     }
   `,
   CommentContent: styled.div`
-    padding: 3px;
+    /* padding: 3px; */
     margin-left: 8px;
-    display: flex;
-    align-items: center;
     overflow: auto;
     max-height: 250px;
-    > p: {
-      font-size: 1vh;
-    };
+    align-items: start;
+
+    > p {
+      font-size: 1.8vh;
+      color: #333333;
+    }
+  `,
+  UpdatedAt: styled.div`
+    align-items: start;
+    > p {
+      font-size: 1.8vh;
+      color: #666666;
+    }
   `,
   DeleteBtnWrapper: styled.div`
     display: flex;

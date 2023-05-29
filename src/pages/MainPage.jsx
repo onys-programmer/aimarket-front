@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import ImageCard from '../components/ImageCard.jsx';
-import Masonry from 'react-masonry-css';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateMainPosts } from '../app/slice';
 import { BASE_URL } from '../services/api/api';
 import { useNavigate } from 'react-router-dom';
+import PostsGrid from '../components/PostsGrid.jsx';
 
 export default function MainPage() {
   const dispatch = useDispatch();
@@ -48,23 +47,11 @@ export default function MainPage() {
   return (
     <>
       <S.Container>
-        <Masonry
-          breakpointCols={breakpointColumnsObj}
-          className="my-masonry-grid"
-          columnClassName="my-masonry-grid_column"
-        >
-          {
-            mainPosts.map((post) => (
-              <div key={post.thumbnail} onClick={() => handleClickGoToPost(post.id)}>
-                <ImageCard post={post} />
-              </div>
-            ))
-          }
-        </Masonry>
+        <PostsGrid posts={mainPosts} />
       </S.Container >
     </>
   );
-}
+};
 
 const S = {
   Container: styled.div`
@@ -73,4 +60,4 @@ const S = {
     max-width: 1740px;
     margin: 0 auto;
   `,
-}
+};
