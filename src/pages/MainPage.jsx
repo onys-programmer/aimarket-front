@@ -1,30 +1,43 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateMainPosts } from '../app/slice';
+import { updateMainPosts, addMainPosts } from '../app/slice';
 import { BASE_URL } from '../services/api/api';
 import { useNavigate } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import PostsGrid from '../components/PostsGrid.jsx';
 
 export default function MainPage() {
+  const [pageNum, setPageNum] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   const dispatch = useDispatch();
   const mainPosts = useSelector((state) => state.app.mainPosts);
   const navigate = useNavigate();
 
   const fetchPosts = async (pageNum) => {
+    console.log(pageNum, "pagenum");
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
-        page: 1, // 원하는 값으로 설정
-        perPage: 30, // 원하는 값으로 설정
+        page: pageNum, // 원하는 값으로 설정
+        perPage: 20, // 원하는 값으로 설정
       },
     });
-    const posts = response.data.posts;
+    const { posts, isLastPage } = response.data;
     if (!posts) {
       alert('이미지를 불러오는데 실패하였습니다.');
       return;
     }
-    dispatch(updateMainPosts(posts));
+    if (isLastPage) {
+      setHasMore(false);
+    }
+    if (pageNum === 0) {
+      dispatch(updateMainPosts(posts));
+      return posts;
+    }
+    dispatch(addMainPosts(posts));
+    return posts;
   }
 
   useEffect(() => {
@@ -44,10 +57,30 @@ export default function MainPage() {
     navigate(`/post/${postId}`);
   };
 
+  const fetchNextPosts = async () => {
+    console.log('fetch next!');
+    const posts = await fetchPosts(pageNum + 1);
+    console.log(posts, "posts");
+    // dispatch(addMainPosts(posts));
+    setPageNum(pageNum + 1);
+  };
+
   return (
     <>
       <S.Container>
-        <PostsGrid posts={mainPosts} />
+        <InfiniteScroll
+          dataLength={mainPosts.length}
+          next={fetchNextPosts}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={
+            <p style={{ textAlign: 'center', color: 'white' }}>
+              <b>Yay! You have seen them all</b>
+            </p>
+          }
+        >
+          <PostsGrid posts={mainPosts} />
+        </InfiniteScroll>
       </S.Container >
     </>
   );

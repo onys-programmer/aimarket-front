@@ -31,6 +31,9 @@ export const slice = createSlice({
     updateMainPosts: (state, action) => {
       state.mainPosts = action.payload;
     },
+    addMainPosts: (state, action) => {
+      state.mainPosts = [...state.mainPosts, ...action.payload];
+    },
     updateUploadedPostImage: (state, action) => {
       state.uploadedPostImage = action.payload;
     },
@@ -47,6 +50,7 @@ export const {
   updateToken,
   deleteToken,
   updateMainPosts,
+  addMainPosts,
   updateUploadedPostImage,
   updateCurrentPostComments
 } = slice.actions;
