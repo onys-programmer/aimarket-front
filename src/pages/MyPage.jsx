@@ -18,7 +18,7 @@ export default function MyPage() {
     }
   }, [user]);
 
-  console.log(user);
+  // console.log(user);
   const handleClickGoToUserPosts = () => {
     if (user) {
       navigate(`/${user?.userId}/posts`);
@@ -49,7 +49,6 @@ const S = {
     padding-top: 70px;
     padding-bottom: 70px;
     width: 100%;
-    max-width: 1740px;
     margin: 0 auto;
     background-color: white;
     min-height: calc(100vh - 70px);

@@ -74,7 +74,7 @@ const S = {
   Container: styled.div`
     padding-top: 10px;
     width: 100%;
-    max-width: 1740px;
+    max-width: 1840px;
     margin: 0 auto;
   `,
 };
