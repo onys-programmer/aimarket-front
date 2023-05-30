@@ -9,11 +9,10 @@ import axios from 'axios';
 import styled from '@emotion/styled';
 
 export default function PostingBox() {
-  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
+  const user = useSelector((state) => state.app.user);
   const [titleInput, setTitleInput] = useState('');
   const [contentInput, setContentInput] = useState('');
-  const user = useSelector((state) => state.app.user);
-  const navigate = useNavigate();
 
   const handleChangeTitle = (e) => {
     setTitleInput(e.target.value);
@@ -34,7 +33,7 @@ export default function PostingBox() {
       const response = await axios.post(`${BASE_URL}/posts`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       if (response.status === 200) {
@@ -47,7 +46,7 @@ export default function PostingBox() {
   };
 
   const handleSubmit = () => {
-    if (!token) {
+    if (!user?.token) {
       alert('로그인이 필요합니다.');
       return;
     }
