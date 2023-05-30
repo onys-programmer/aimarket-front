@@ -6,6 +6,8 @@ import { useSelector } from "react-redux";
 import { BASE_URL } from "../../services/api/api";
 import DeleteCommentButton from "./DeleteCommentButton";
 import { parseRelativeDate } from "../../utils/util";
+import { Flex, Input } from "@chakra-ui/react";
+import { EditIcon } from "@chakra-ui/icons";
 
 export default function Comment({ comment, forList = false }) {
   const [creator, setCreator] = useState(null);
@@ -68,6 +70,59 @@ export default function Comment({ comment, forList = false }) {
   const createdAt = parseRelativeDate(comment?.createdAt);
   const updatedAt = comment?.updatedAt ? parseRelativeDate(comment?.updatedAt) : null;
 
+  const [state, setState] = useState('default')
+  const [contentInput, setContentInput] = useState(comment?.content)
+
+  useEffect(() => {
+    setContentInput(comment?.content)
+  }, [comment?.content])
+
+  const handleChangeContentInput = (e) => {
+    setContentInput(e.target.value)
+  }
+
+  const requestEditComment = (commentId, data) => {
+    axios.patch(`${BASE_URL}/comments/${commentId}`, data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${user?.token}`
+        }
+      }
+    ).then((response) => {
+      const result = response.data;
+      if (response?.status === 200) {
+        comment.content = result.comment.content;
+        setState('default');
+      } else if (response?.status === 401) {
+        alert('로그인 후 이용해주세요.');
+      } else {
+        alert('댓글 수정에 실패하였습니다.');
+      }
+    }).catch((error) => {
+      alert(error.message);
+    })
+  };
+
+  const onEditComment = () => {
+    const data = {
+      content: contentInput
+    };
+    if (contentInput.length > 200) {
+      alert('댓글은 200자 이내로 작성해주세요.')
+      return;
+    }
+    requestEditComment(comment?._id, data);
+  }
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onEditComment()
+    }
+    if (e.key === 'Escape') {
+      setState('default')
+    }
+  }
 
   return (
     <S.Container>
@@ -77,11 +132,18 @@ export default function Comment({ comment, forList = false }) {
           <p>{creator?.name}</p>
         </S.Item>
       </S.CreatorName>
-      <S.CommentContent>
-        <S.Item>
-          <p>{comment?.content}</p>
-        </S.Item>
-      </S.CommentContent>
+      {
+        state === 'default' &&
+        <S.CommentContent>
+          <S.Item>
+            <p>{comment?.content}</p>
+          </S.Item>
+        </S.CommentContent>
+      }
+      {
+        state === 'editing' &&
+        <Input value={contentInput} onChange={handleChangeContentInput} onKeyDown={handleKeyDown} />
+      }
       <S.UpdatedAt>
         <S.Item>
           <p>{updatedAt || createdAt}</p>
@@ -89,9 +151,20 @@ export default function Comment({ comment, forList = false }) {
       </S.UpdatedAt>
       {
         !forList && isOwner && (
-          <S.DeleteBtnWrapper>
-            <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
-          </S.DeleteBtnWrapper>
+          <Flex>
+            <S.EditBtnWrapper>
+              <EditIcon
+                color="#565656"
+                boxSize={3}
+                cursor={"pointer"}
+                _hover={{ color: "#279df4" }}
+                onClick={() => setState('editing')}
+              />
+            </S.EditBtnWrapper>
+            <S.DeleteBtnWrapper>
+              <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
+            </S.DeleteBtnWrapper>
+          </Flex>
         )
       }
     </S.Container>
@@ -144,7 +217,13 @@ const S = {
   DeleteBtnWrapper: styled.div`
     display: flex;
     align-items: start;
-    padding: 0.7vh;
+    padding: 0.7vh 0.2vh;
     label: delete-btn-wrapper;
+  `,
+  EditBtnWrapper: styled.div`
+    display: flex;
+    align-items: start;
+    padding: 0.9vh 0.2vh;
+
   `,
 }
