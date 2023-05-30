@@ -32,11 +32,12 @@ export default function MainPage() {
     if (isLastPage) {
       setHasMore(false);
     }
-    if (pageNum === 0) {
+    if (pageNum === 1) {
       dispatch(updateMainPosts(posts));
       return posts;
+    } else {
+      dispatch(addMainPosts(posts));
     }
-    dispatch(addMainPosts(posts));
     return posts;
   }
 
