@@ -16,7 +16,7 @@ export default function PostingPage() {
         navigate("/login");
       }
     }
-  }, [token]);
+  }, [token, navigate]);
 
   return (
     <>

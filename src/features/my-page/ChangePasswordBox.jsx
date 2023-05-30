@@ -34,7 +34,7 @@ export default function ChangePasswordBox() {
             'Content-Type': 'application/json',
           },
         });
-      const result = await response.data;
+      await response.data;
       if (response?.status === 200) {
         setPageState("changing");
       }

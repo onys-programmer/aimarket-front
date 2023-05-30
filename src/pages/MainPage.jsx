@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateMainPosts, addMainPosts } from '../app/slice';
 import { BASE_URL } from '../services/api/api';
@@ -14,7 +14,7 @@ export default function MainPage() {
   const dispatch = useDispatch();
   const mainPosts = useSelector((state) => state.app.mainPosts);
 
-  const fetchPosts = async (pageNum) => {
+  const fetchPosts = useCallback(async (pageNum) => {
     console.log(pageNum, "pagenum");
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
@@ -37,11 +37,14 @@ export default function MainPage() {
       dispatch(addMainPosts(posts));
     }
     return posts;
-  }
+  }, [dispatch]);
 
   useEffect(() => {
-    fetchPosts(1);
-  }, []);
+    const fetchAndSetPosts = async () => {
+      await fetchPosts(1);
+    };
+    fetchAndSetPosts();
+  }, [fetchPosts]);
 
   const fetchNextPosts = async () => {
     await fetchPosts(pageNum + 1);

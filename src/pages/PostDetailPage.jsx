@@ -33,7 +33,7 @@ export default function PostDetailPage() {
   }
 
   const { postId } = useParams();
-  console.log(postId, "postId")
+  // console.log(postId, "postId")
   // const { postId } = param;
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function PostDetailPage() {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [postId]);
 
   const handleClickEditPost = () => {
     setBoxState('editing');

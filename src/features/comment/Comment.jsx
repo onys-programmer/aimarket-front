@@ -34,7 +34,7 @@ export default function Comment({ comment, forList = false }) {
 
   useEffect(() => {
     fetchUser(comment?.creator);
-  }, []);
+  }, [comment]);
 
 
   const requestDeleteComment = async (commentId) => {
@@ -48,7 +48,7 @@ export default function Comment({ comment, forList = false }) {
         }
       );
 
-      const result = await response.data;
+      await response.data;
       if (response?.status === 200) {
         alert('댓글이 삭제되었습니다.');
         window.location.reload();

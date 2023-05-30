@@ -16,7 +16,7 @@ export default function MyPage() {
     if (!user?.token) {
       navigate('/');
     }
-  }, [user]);
+  }, [user, navigate]);
 
   // console.log(user);
   const handleClickGoToUserPosts = () => {

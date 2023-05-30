@@ -24,7 +24,7 @@ export default function PostDetailBox({ postId, boxState }) {
 
   useEffect(() => {
     fetchPost(postId);
-  }, []);
+  }, [postId]);
 
   const handleChangeCommentInput = (e) => {
     setCommentInput(e.target.value);
@@ -49,7 +49,7 @@ export default function PostDetailBox({ postId, boxState }) {
           }
         });
 
-      const result = await response.data;
+      await response.data;
 
       if (response?.status === 200) {
         setCommentInput('');
@@ -79,7 +79,7 @@ export default function PostDetailBox({ postId, boxState }) {
       creator: user?.userId,
       postId: post?.id,
     });
-  }, [commentInput]);
+  }, [commentInput, post, user]);
 
   // when edit
   const [titleInput, setTitleInput] = useState(post?.title);
@@ -109,7 +109,7 @@ export default function PostDetailBox({ postId, boxState }) {
         }
       );
 
-      const result = await response.data;
+      await response.data;
       if (response?.status === 200) {
         window.location.reload();
       } else if (response?.status === 401) {
