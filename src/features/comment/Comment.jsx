@@ -112,6 +112,7 @@ const S = {
   `,
   CreatorName: styled.div`
     /* padding: 3px; */
+    width: 25%;
     > p {
       font-size: 1.8vh;
       color: #666666;
@@ -133,7 +134,7 @@ const S = {
   `,
   UpdatedAt: styled.div`
     padding-top: 0.2vh;
-    width: 15%;
+    width: 22%;
     align-items: start;
     p {
       font-size: 1.4vh;

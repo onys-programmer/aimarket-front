@@ -60,7 +60,7 @@ export default function PostDetailBox({ postId }) {
         alert(`댓글 작성에 실패하였습니다.${JSON.stringify(response)}`);
       }
     } catch (error) {
-      alert(error.message);
+      console.log(error.message);
     }
   };
 
@@ -82,14 +82,16 @@ export default function PostDetailBox({ postId }) {
   }, [commentInput]);
 
   return (
-    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="fit-content" maxH="76vh">
-      <Flex gap="30px">
+    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="76vh" maxH="76vh">
+      <Flex gap="30px" height="75vh">
+        <S.ImageArea>
         {
           post?.image ?
-            <S.Image src={post?.image} />
-            :
-            <S.SkeletonImage />
+          <S.Image src={post?.image} />
+          :
+          <S.SkeletonImage />
         }
+        </S.ImageArea>
         <S.TextArea>
           <S.Title><h3>{post?.title}</h3></S.Title>
           <S.Description>{post?.description}</S.Description>
@@ -119,8 +121,16 @@ export default function PostDetailBox({ postId }) {
 };
 
 const S = {
+  ImageArea: styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  `,
   Image: styled.img`
-    height: 70vh;
+    /* height: auto; */
+    height: 68vh;
+    object-fit: contain;
     border-radius: 16px;
   `,
   SkeletonImage: styled.div`
@@ -132,9 +142,12 @@ const S = {
   TextArea: styled.div`
     display: flex;
     flex-direction: column;
-    /* height: 66vh; */
+    justify-content: start;
     gap: 24px;
     width: 100%;
+    height: 68vh;
+    max-height: 68vh;
+    label: TextArea;
   `,
   Title: styled.div`
     border-bottom: 2px solid #E2E8F0;
@@ -145,7 +158,7 @@ const S = {
   `,
   Description: styled.div`
     height: fit-content;
-    max-height: 30%;
+    max-height: 20%;
     overflow: auto;
     border-radius: 16px;
     padding: 16px;
@@ -172,10 +185,11 @@ const S = {
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 100%;
-    max-height: 40%;
     gap: 8px;
     padding: 4px 8px;
+    height: fit-content;
+    max-height: 20.5vh;
+    label: CommentArea;
   `,
   CommentListArea: styled.div`
     height: 100%;
