@@ -7,8 +7,8 @@ const parseRelativeDate = (dateString) => {
   const date = new Date(dateString);
   const now = new Date();
 
-  console.log(dateString);
-  console.log(date);
+  // console.log(dateString);
+  // console.log(date);
 
   const diffMilliseconds = now - date;
   const diffSeconds = Math.floor(diffMilliseconds / 1000);

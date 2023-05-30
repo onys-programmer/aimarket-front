@@ -13,6 +13,7 @@ export default function CommentsBox({ userId }) {
       minH="250px"
       maxH="672px"
       padding="24px"
+      overflow="auto"
     >
       <S.BoxTitle>
         <h3>작성한 댓글</h3>

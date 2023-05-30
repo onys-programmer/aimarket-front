@@ -63,7 +63,7 @@ export default function Comment({ comment, forList = false }) {
   const handleClickDeleteComment = (commentId) => {
     requestDeleteComment(commentId);
   };
-  console.log(comment);
+  // console.log(comment);
 
   const createdAt = parseRelativeDate(comment?.createdAt);
   const updatedAt = comment?.updatedAt ? parseRelativeDate(comment?.updatedAt) : null;

@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateMainPosts, addMainPosts } from '../app/slice';
 import { BASE_URL } from '../services/api/api';
-import { useNavigate } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import PostsGrid from '../components/PostsGrid.jsx';
 
@@ -14,10 +13,9 @@ export default function MainPage() {
 
   const dispatch = useDispatch();
   const mainPosts = useSelector((state) => state.app.mainPosts);
-  const navigate = useNavigate();
 
   const fetchPosts = async (pageNum) => {
-    console.log(pageNum, "pagenum");
+    // console.log(pageNum, "pagenum");
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
         page: pageNum, // 원하는 값으로 설정
@@ -45,23 +43,8 @@ export default function MainPage() {
     fetchPosts(0);
   }, []);
 
-  const breakpointColumnsObj = {
-    default: 7,
-    1620: 5,
-    1240: 3,
-    700: 2,
-    500: 1
-  };
-
-  const handleClickGoToPost = (postId) => {
-    // console.log(postId)
-    navigate(`/post/${postId}`);
-  };
-
   const fetchNextPosts = async () => {
-    console.log('fetch next!');
-    const posts = await fetchPosts(pageNum + 1);
-    console.log(posts, "posts");
+    await fetchPosts(pageNum + 1);
     // dispatch(addMainPosts(posts));
     setPageNum(pageNum + 1);
   };
