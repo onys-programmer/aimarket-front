@@ -15,7 +15,7 @@ export default function MainPage() {
   const mainPosts = useSelector((state) => state.app.mainPosts);
 
   const fetchPosts = async (pageNum) => {
-    // console.log(pageNum, "pagenum");
+    console.log(pageNum, "pagenum");
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
         page: pageNum, // 원하는 값으로 설정
@@ -40,7 +40,7 @@ export default function MainPage() {
   }
 
   useEffect(() => {
-    fetchPosts(0);
+    fetchPosts(1);
   }, []);
 
   const fetchNextPosts = async () => {
