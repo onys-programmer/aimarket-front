@@ -10,7 +10,7 @@ import PostsGrid from '../components/PostsGrid.jsx';
 export default function MainPage() {
   const [pageNum, setPageNum] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [loaderMessage, setLoaderMessage] = useState('Loading...');
+  const [loaderMessage, setLoaderMessage] = useState('새로고침 몇 번이 필요합니다.');
   const dispatch = useDispatch();
   const mainPosts = useSelector((state) => state.app.mainPosts);
 
