@@ -161,8 +161,8 @@ export default function PostDetailBox({ postId, boxState }) {
   }, [contentInput]);
 
   return (
-    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height="76vh" maxH="76vh">
-      <Flex gap="30px" height="75vh">
+    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height={{sm: "155vh", md: "76vh"}}>
+      <Flex gap="30px" height="75vh" flexDir={{sm: "column", md: "row"}}>
         <S.ImageArea>
           {
             post?.image ?

@@ -122,7 +122,7 @@ export default function SignUpBox() {
   }, [memorableDateInput])
 
   return (
-    <Card padding={'40px'} borderRadius={'8px'}>
+    <Card padding={'40px'} borderRadius={'8px'} width="90%" maxW={"334px"}>
       <S.TitleWrapper>
         <S.Title>AI Market</S.Title>
       </S.TitleWrapper>
@@ -172,7 +172,7 @@ const S = {
   ContentWrapper: styled.div`
     box-sizing: border-box;
     flex-shrink: 0;
-    width: 254px;
+    width: 100%;
     height: fit-content;
     display: flex;
     flex-direction: column;

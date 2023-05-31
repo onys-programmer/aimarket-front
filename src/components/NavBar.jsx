@@ -19,7 +19,11 @@ export default function NavBar() {
         </a>
         <li>
           <a href='/posting'>
-            <Button colorScheme='red' borderRadius={'24px'}>만들기</Button>
+            <Button 
+            colorScheme='red' 
+            borderRadius={'24px'}
+            fontSize={{base: "12px", md: "14px"}}
+            >만들기</Button>
           </a>
         </li>
         {
@@ -43,7 +47,13 @@ export default function NavBar() {
             <S.NavItemAuth>
               <li>
                 <a href='/signup'>
-                  <Button colorScheme='gray' variant="outline" >회원 가입</Button>
+                  <Button 
+                    colorScheme='gray' 
+                    variant="outline"             
+                    fontSize={{base: "12px", md: "14px"}}
+                  >
+                    회원 가입
+                  </Button>
                 </a>
               </li>
               <LogInButton />
@@ -68,6 +78,11 @@ const S = {
     display: flex;
     justify-content: start;
     gap: 36px;
+    // for moblile
+    @media (max-width: 768px) {
+      gap: 12px;
+      padding: 40px 16px;
+    }
     align-items: center;
     border-bottom: 1px solid #eaeaea;
   `,
@@ -82,10 +97,16 @@ const S = {
   SectionTitleEng: styled.h2`
     font-family: 'League Spartan', sans-serif;
     font-size: 16px;
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
   `,
   ParagraphSmallEng: styled.p`
     font-family: 'League Spartan', sans-serif;
     font-size: 14px;
+    @media (max-width: 768px) {
+      font-size: 12px;
+    }
   `,
   MyPageIcon: styled.div`
     margin-left: auto;

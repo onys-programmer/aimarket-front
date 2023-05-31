@@ -84,6 +84,10 @@ const S = {
   `,
   Container: styled.div`
     height: 90vh;
+    // for mobile
+    @media (max-width: 768px) {
+      height: 175vh;
+    }
     display: flex;
     flex-direction: column;
     justify-content: center;
