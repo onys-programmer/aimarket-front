@@ -84,7 +84,7 @@ const S = {
   `,
   Container: styled.div`
     height: 90vh;
-    // for mobile
+    // smaller than mobile
     @media (max-width: 768px) {
       height: 175vh;
     }

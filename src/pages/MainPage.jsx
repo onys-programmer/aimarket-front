@@ -10,7 +10,7 @@ import PostsGrid from '../components/PostsGrid.jsx';
 export default function MainPage() {
   const [pageNum, setPageNum] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-
+  const [loaderMessage, setLoaderMessage] = useState('Loading...');
   const dispatch = useDispatch();
   const mainPosts = useSelector((state) => state.app.mainPosts);
 
@@ -22,6 +22,9 @@ export default function MainPage() {
         perPage: 20, // 원하는 값으로 설정
       },
     });
+    if (response.status !== 200) {
+      setLoaderMessage('새로고침이 필요합니다.');
+    }
     const { posts, isLastPage } = response.data;
     if (!posts) {
       alert('이미지를 불러오는데 실패하였습니다.');
@@ -59,7 +62,7 @@ export default function MainPage() {
           dataLength={mainPosts.length}
           next={fetchNextPosts}
           hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
+          loader={<h4>{loaderMessage}</h4>}
           endMessage={
             <p style={{ textAlign: 'center', color: 'white' }}>
               <b>Yay! You have seen them all</b>

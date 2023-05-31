@@ -126,7 +126,9 @@ export default function Comment({ comment, forList = false }) {
 
   return (
     <S.Container>
-      <Avatar src={creator?.image} size="sm" />
+      <Flex padding={{base: "4px", md: "4px"}}>
+      <Avatar src={creator?.image} width={{base: "16px", md: "24px"}} height={{base: "16px", md: "24px"}} />
+      </Flex>
       <S.CreatorName>
         <S.Item>
           <p>{creator?.name}</p>
@@ -177,6 +179,9 @@ const S = {
     justify-content: space-beween;
     gap: 12px;
     width: 100%;
+    @media (max-width: 768px) {
+      gap: 6px;
+    }
   `,
   Item: styled.div`
     padding-top: 0.4vh;
@@ -186,9 +191,15 @@ const S = {
   CreatorName: styled.div`
     /* padding: 3px; */
     width: 25%;
-    > p {
+    * {
       font-size: 1.8vh;
       color: #666666;
+    }
+
+    @media (max-width: 768px) {
+      * {
+        font-size: 10px;
+      }
     }
   `,
   CommentContent: styled.div`
@@ -200,18 +211,29 @@ const S = {
     max-height: 250px;
     align-items: start;
 
-    > p {
+    * {
       font-size: 1.8vh;
       color: #333333;
+    }
+    @media (max-width: 768px) {
+      * {
+        font-size: 10px;
+      }
     }
   `,
   UpdatedAt: styled.div`
     padding-top: 0.2vh;
     width: 22%;
     align-items: start;
-    p {
+    * {
       font-size: 1.4vh;
       color: #666666;
+    }
+    @media (max-width: 768px) {
+      width: 26%;
+      * {
+        font-size: 6px;
+      }
     }
   `,
   DeleteBtnWrapper: styled.div`

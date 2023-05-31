@@ -161,8 +161,8 @@ export default function PostDetailBox({ postId, boxState }) {
   }, [contentInput]);
 
   return (
-    <Card width='80vw' maxW={"1200px"} padding={'30px'} borderRadius={"24px"} height={{sm: "155vh", md: "76vh"}}>
-      <Flex gap="30px" height="75vh" flexDir={{sm: "column", md: "row"}}>
+    <Card width='90vw' maxW={"1200px"} padding={{base:"16px", md: '30px'}} borderRadius={"24px"} height={{base: "155vh", md: "76vh"}}>
+      <Flex gap="30px" height="75vh" flexDir={{base: "column", md: "row"}}>
         <S.ImageArea>
           {
             post?.image ?
@@ -222,10 +222,17 @@ const S = {
     justify-content: center;
     align-items: center;
     width: 100%;
-  `,
+    `,
   Image: styled.img`
     /* height: auto; */
     height: 68vh;
+    max-height: 87vh;
+    // smaller than mobile
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+      height: fit-content;
+    }
     object-fit: contain;
     border-radius: 16px;
   `,
@@ -243,6 +250,10 @@ const S = {
     width: 100%;
     height: 68vh;
     max-height: 68vh;
+    @media (max-width: 768px) {
+      height: fit-content;
+      max-height: fit-content;
+    }
     label: TextArea;
   `,
   Title: styled.div`
