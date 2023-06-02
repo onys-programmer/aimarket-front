@@ -1,4 +1,4 @@
-import { Card, Flex, Stack, Input, Button, Textarea } from '@chakra-ui/react';
+import { Card, Flex, Stack, Input, Button, Textarea, Text } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
@@ -82,7 +82,6 @@ export default function PostingBox() {
 
   const {
     acceptedFiles,
-    fileRejections,
     getRootProps,
     getInputProps
   } = useDropzone({
@@ -105,16 +104,16 @@ export default function PostingBox() {
     </li>
   ));
 
-  const fileRejectionItems = fileRejections.map(({ file, errors }) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-      <ul>
-        {errors.map(e => (
-          <li key={e.code}>{e.message}</li>
-        ))}
-      </ul>
-    </li>
-  ));
+  // const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+  //   <li key={file.path}>
+  //     {file.path} - {file.size} bytes
+  //     <ul>
+  //       {errors.map(e => (
+  //         <li key={e.code}>{e.message}</li>
+  //       ))}
+  //     </ul>
+  //   </li>
+  // ));
 
 
   return (
@@ -124,14 +123,12 @@ export default function PostingBox() {
           <section className="container" >
             <div>
               <input {...getInputProps()} />
-              <p>Drag 'n' drop some files here, or click to select files</p>
-              <em>(Only *.jpg, *.jpeg and *.png images will be accepted)</em>
+              <p>드래그 앤 드롭 혹은 클릭하여 파일을 올려주세요</p>
+              <em>(10mb 이내의 jpg, jpeg, png 파일만 가능합니다.)</em>
             </div>
             <aside>
-              <h4>Accepted files</h4>
-              <ul>{acceptedFileItems}</ul>
-              <h4>Rejected files</h4>
-              <ul>{fileRejectionItems}</ul>
+              <Text fontSize={"100%"}>올라간 파일</Text>
+              <Text fontSize={"150%"}>{acceptedFileItems}</Text>
             </aside>
           </section>
         </S.DropZone>
