@@ -138,12 +138,6 @@ export default function PostDetailBox({ postId, boxState }) {
     requestEditPost(data);
   };
 
-  const handleEnterEditPost = (e) => {
-    if (e.key === 'Enter') {
-      onEditPost();
-    }
-  };
-
   useEffect(() => {
     if (titleInput?.length > 50) {
       alert('제목은 50자 이내로 작성해주세요.');
@@ -161,8 +155,8 @@ export default function PostDetailBox({ postId, boxState }) {
   }, [contentInput]);
 
   return (
-    <Card width='90vw' maxW={"1200px"} padding={{base:"16px", md: '30px'}} borderRadius={"24px"} height={{base: "155vh", md: "76vh"}}>
-      <Flex gap="30px" height="75vh" flexDir={{base: "column", md: "row"}}>
+    <Card width='90vw' maxW={"1200px"} padding={{ base: "16px", md: '30px' }} borderRadius={"24px"} height={{ base: "155vh", md: "76vh" }}>
+      <Flex gap="30px" height="75vh" flexDir={{ base: "column", md: "row" }}>
         <S.ImageArea>
           {
             post?.image ?
@@ -206,7 +200,7 @@ export default function PostDetailBox({ postId, boxState }) {
               value={contentInput}
               height="100%"
               onChange={handleChangeContentInput}
-              onKeyDown={handleEnterEditPost}
+              cols="20" wrap="hard"
             />
             <Button colorScheme="blue" onClick={() => onEditPost()}>수정</Button>
           </Stack>
