@@ -1,16 +1,15 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card, Input, Flex, Button } from '@chakra-ui/react';
+import { Card, Input, Flex, Button, Textarea, Stack } from '@chakra-ui/react';
 import styled from '@emotion/styled';
-import Comments from '../comment/Comments';
 import { useSelector } from 'react-redux';
 
-export default function PostDetailBox({ postId }) {
+export default function PostEditingBox({ postId, boxState, setBoxState }) {
   const user = useSelector((state) => state.app.user);
   const [post, setPost] = useState(null);
-  const [commentInput, setCommentInput] = useState('');
-  const [commentData, setCommentData] = useState({});
+  const [titleInput, setTitleInput] = useState(post?.title);
+  const [contentInput, setContentInput] = useState(post?.description);
 
   const fetchPost = async (postId) => {
     const response = await axios.get(`${BASE_URL}/posts/${postId}`);
@@ -26,60 +25,75 @@ export default function PostDetailBox({ postId }) {
     fetchPost(postId);
   }, [postId]);
 
-  const handleChangeCommentInput = (e) => {
-    setCommentInput(e.target.value);
+  useEffect(() => {
+    setTitleInput(post?.title);
+    setContentInput(post?.description);
+  }, [post]);
+
+  const handleChangeTitleInput = (e) => {
+    setTitleInput(e.target.value);
   };
 
-  const handleEnterSubmitComment = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmitComment(commentData);
-    }
+  const handleChangeContentInput = (e) => {
+    setContentInput(e.target.value);
   };
 
-  const handleSubmitComment = async (data) => {
-    if (!commentInput) {
-      return;
-    }
+  const requestEditPost = async (data) => {
     try {
-      const response = await axios.post(`${BASE_URL}/comments`, data,
+      const response = await axios.patch(`${BASE_URL}/posts/${post?.id}`, data,
         {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${user?.token}`
           }
-        });
+        }
+      );
 
       await response.data;
-
       if (response?.status === 200) {
-        setCommentInput('');
-        fetchPost(postId);
+        setBoxState('default');
+        window.location.reload();
       } else if (response?.status === 401) {
         alert('로그인 후 이용해주세요.');
       } else {
-        alert(`댓글 작성에 실패하였습니다.${JSON.stringify(response)}`);
+        alert('게시글 수정에 실패하였습니다.');
       }
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
     }
   };
 
-  const handleClickSubmitComment = () => {
-    handleSubmitComment(commentData);
+  const onEditPost = () => {
+    if (!titleInput) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+    if (!contentInput) {
+      alert('내용을 입력해주세요.');
+      return;
+    }
+    const data = {
+      title: titleInput,
+      description: contentInput,
+    }
+    requestEditPost(data);
   };
 
   useEffect(() => {
-    if (commentInput.length > 200) {
-      alert('댓글은 200자 이내로 작성해주세요.');
-      setCommentInput(commentInput.slice(0, 200));
+    if (titleInput?.length > 50) {
+      alert('제목은 50자 이내로 작성해주세요.');
+      setTitleInput(titleInput.slice(0, 50));
       return;
     }
-    setCommentData({
-      content: commentInput,
-      creator: user?.userId,
-      postId: post?.id,
-    });
-  }, [commentInput, post, user]);
+  }, [titleInput]);
+
+  useEffect(() => {
+    if (contentInput?.length > 500) {
+      alert('내용은 500자 이내로 작성해주세요.');
+      setContentInput(contentInput.slice(0, 500));
+      return;
+    }
+  }, [contentInput]);
 
   return (
     <Card width='90vw' maxW={"1200px"} padding={{ base: "16px", md: '30px' }} borderRadius={"24px"} height={{ base: "155vh", md: "76vh" }}>
@@ -92,38 +106,21 @@ export default function PostDetailBox({ postId }) {
               <S.SkeletonImage />
           }
         </S.ImageArea>
-        <S.TextArea>
-          <S.Title><h3>{post?.title}</h3></S.Title>
-          <S.Description>
-            {
-              post?.description.split('\n').map((line, index) => (
-                <Fragment key={index}>
-                  {line}
-                  <br />
-                </Fragment>
-              ))
-            }
-          </S.Description>
-          <S.UserArea>
-            <S.ProfileImage src={post?.creator?.image} />
-            <S.UserName>{post?.creator?.name}</S.UserName>
-          </S.UserArea>
-          <S.CommentArea>
-            <S.CommentAreaTitle>
-              <h3>댓글</h3>
-            </S.CommentAreaTitle>
-            <S.CommentListArea>
-              <Comments comments={post?.comments} />
-            </S.CommentListArea>
-            {
-              user?.userId &&
-              <Flex gap="8px" marginTop="auto">
-                <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} value={commentInput} />
-                <Button onClick={handleClickSubmitComment}>작성</Button>
-              </Flex>
-            }
-          </S.CommentArea>
-        </S.TextArea>
+        {
+          boxState === 'editing' &&
+          <Stack width="100%" height="68vh">
+            <Input size="lg" placeholder='제목을 입력하세요.' value={titleInput} onChange={handleChangeTitleInput} />
+            <Textarea
+              placeholder='내용을 입력하세요.'
+              value={contentInput}
+              height="100%"
+              onChange={handleChangeContentInput}
+              cols="20"
+              wrap="hard"
+            />
+            <Button colorScheme="blue" onClick={() => onEditPost()}>수정</Button>
+          </Stack>
+        }
       </Flex>
     </Card >
   );

@@ -9,6 +9,7 @@ import PostDetailBox from '../features/post/PostDetailBox';
 import DeletePostButton from '../features/post/DeletePostButton';
 import { EditIcon } from '@chakra-ui/icons';
 import { Flex } from '@chakra-ui/react';
+import PostEditingBox from '../features/post/PostEditingBox';
 
 export default function PostDetailPage() {
   const [post, setPost] = useState(null);
@@ -69,7 +70,12 @@ export default function PostDetailPage() {
             }
             <DeletePostButton post={post} />
           </Flex>
-          <PostDetailBox postId={postId} boxState={boxState} />
+          {
+            boxState === 'editing' ?
+              <PostEditingBox postId={postId} boxState={boxState} setBoxState={setBoxState} />
+              :
+              <PostDetailBox postId={postId} boxState={boxState} />
+          }
         </S.WithBackWrapper>
       </S.Container>
     </S.PostDetailPage>
