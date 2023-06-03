@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import PostDetailBox from '../features/post/PostDetailBox';
 import DeletePostButton from '../features/post/DeletePostButton';
 import { EditIcon } from '@chakra-ui/icons';
-import { Flex } from '@chakra-ui/react';
+import { Flex, Button } from '@chakra-ui/react';
 import PostEditingBox from '../features/post/PostEditingBox';
 
 export default function PostDetailPage() {
@@ -51,6 +51,10 @@ export default function PostDetailPage() {
     setBoxState('editing');
   };
 
+  const handleClickCancelEditPost = () => {
+    setBoxState('default');
+  };
+
   return (
     <S.PostDetailPage>
       <S.Container>
@@ -58,17 +62,31 @@ export default function PostDetailPage() {
           <Flex justifyContent="space-between" alignItems="center" gap={3}>
             <BackButton url={"/"} />
             {
-              boxState !== 'editing' && isOwner &&
-              <EditIcon
-                boxSize={9}
-                cursor="pointer"
-                color="#333333"
-                marginLeft={"auto"}
-                _hover={{ color: "#279df4" }}
-                onClick={handleClickEditPost}
-              />
+              isOwner &
+                boxState === 'editing' ?
+                <Button
+                  color="#333333"
+                  marginLeft={"auto"}
+                  onClick={handleClickCancelEditPost}
+                >
+                  취소
+                </Button>
+                :
+                <EditIcon
+                  boxSize={9}
+                  cursor="pointer"
+                  color="#333333"
+                  marginLeft={"auto"}
+                  _hover={{ color: "#279df4" }}
+                  onClick={handleClickEditPost}
+                />
             }
-            <DeletePostButton post={post} />
+            {
+              isOwner & boxState !== 'editing' ?
+                <DeletePostButton post={post} />
+                :
+                <></>
+            }
           </Flex>
           {
             boxState === 'editing' ?
