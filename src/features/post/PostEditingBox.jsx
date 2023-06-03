@@ -1,15 +1,37 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card, Input, Flex, Button, Textarea, Stack } from '@chakra-ui/react';
+import { Card, Input, Flex, Button, Textarea, Stack, Text } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
+import { useDropzone } from 'react-dropzone';
+import { EditIcon, SmallCloseIcon } from '@chakra-ui/icons';
 
 export default function PostEditingBox({ postId, boxState, setBoxState }) {
   const user = useSelector((state) => state.app.user);
   const [post, setPost] = useState(null);
   const [titleInput, setTitleInput] = useState(post?.title);
   const [contentInput, setContentInput] = useState(post?.description);
+  const [replaceImage, setReplaceImage] = useState(false);
+
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps
+  } = useDropzone({
+    accept: {
+      'image/jpg': [],
+      'image/jpeg': [],
+      'image/png': []
+    }
+  });
+
+  const acceptedFileItems = acceptedFiles.map(file => (
+    <li key={file.path}>
+      {file.path} - {file.size} bytes
+    </li>
+  ));
+
 
   const fetchPost = async (postId) => {
     const response = await axios.get(`${BASE_URL}/posts/${postId}`);
@@ -95,17 +117,63 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
     }
   }, [contentInput]);
 
+  const handleClickEditImage = () => {
+    setReplaceImage(true);
+  };
+
+  const handleClickCancelEditImage = () => {
+    setReplaceImage(false);
+  };
+
   return (
     <Card width='90vw' maxW={"1200px"} padding={{ base: "16px", md: '30px' }} borderRadius={"24px"} height={{ base: "155vh", md: "76vh" }}>
       <Flex gap="30px" height="75vh" flexDir={{ base: "column", md: "row" }}>
-        <S.ImageArea>
-          {
-            post?.image ?
-              <S.Image src={post?.image} />
-              :
-              <S.SkeletonImage />
-          }
-        </S.ImageArea>
+        {
+          boxState === 'editing' &&
+            replaceImage ?
+            <Stack width={"100%"}>
+              <SmallCloseIcon
+                boxSize={7}
+                cursor="pointer"
+                color="#333333"
+                marginLeft={"auto"}
+                _hover={{ color: "#279df4" }}
+                onClick={handleClickCancelEditImage}
+              />
+              <S.DropZone {...getRootProps({ className: 'dropzone' })}>
+                <section className="container" >
+                  <div>
+                    <input {...getInputProps()} />
+                    <p>드래그 앤 드롭 혹은 클릭하여 파일을 올려주세요</p>
+                    <em>(10mb 이내의 jpg, jpeg, png 파일만 가능합니다.)</em>
+                  </div>
+                  <aside>
+                    <Text fontSize={"100%"}>올라간 파일</Text>
+                    <Text fontSize={"150%"}>{acceptedFileItems}</Text>
+                  </aside>
+                </section>
+              </S.DropZone>
+            </Stack>
+            :
+            <S.ImageArea>
+              {
+                post?.image ?
+                  <Stack justifyContent={"center"}>
+                    <EditIcon
+                      boxSize={7}
+                      cursor="pointer"
+                      color="#333333"
+                      marginLeft={"auto"}
+                      _hover={{ color: "#279df4" }}
+                      onClick={handleClickEditImage}
+                    />
+                    <S.Image src={post?.image} />
+                  </Stack>
+                  :
+                  <S.SkeletonImage />
+              }
+            </S.ImageArea>
+        }
         {
           boxState === 'editing' &&
           <Stack width="100%" height="68vh">
@@ -132,6 +200,7 @@ const S = {
     justify-content: center;
     align-items: center;
     width: 100%;
+    position: relative;
     `,
   Image: styled.img`
     /* height: auto; */
@@ -217,5 +286,18 @@ const S = {
     > h3 {
       font-size: 1.8vh;
     };
+  `,
+  DropZone: styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 92.3%;
+    border: 1px solid #ddd;
+    background-color: #fafafa;
+    color: #7d7d7d;
+    border-radius: 16px;
+    padding: 30px;
+    cursor: pointer;
   `,
 };
