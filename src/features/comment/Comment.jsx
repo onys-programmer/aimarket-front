@@ -13,6 +13,7 @@ export default function Comment({ comment, forList = false }) {
   const [creator, setCreator] = useState(null);
   const user = useSelector((state) => state.app.user);
   const [isOwner, setIsOwner] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   useEffect(() => {
     if (comment) {
@@ -51,7 +52,7 @@ export default function Comment({ comment, forList = false }) {
       await response.data;
       if (response?.status === 200) {
         alert('댓글이 삭제되었습니다.');
-        window.location.reload();
+        setIsDeleted(true);
       } else if (response?.status === 401) {
         alert('로그인 후 이용해주세요.');
       } else {
@@ -125,51 +126,56 @@ export default function Comment({ comment, forList = false }) {
   }
 
   return (
-    <S.Container>
-      <Flex padding={{ base: "4px", md: "4px" }}>
-        <Avatar src={creator?.image} width={{ base: "16px", md: "24px" }} height={{ base: "16px", md: "24px" }} />
-      </Flex>
-      <S.CreatorName>
-        <S.Item>
-          <p>{creator?.name}</p>
-        </S.Item>
-      </S.CreatorName>
+    <>
       {
-        state === 'default' &&
-        <S.CommentContent>
-          <S.Item>
-            <p>{comment?.content}</p>
-          </S.Item>
-        </S.CommentContent>
-      }
-      {
-        state === 'editing' &&
-        <Input value={contentInput} onChange={handleChangeContentInput} onKeyDown={handleKeyDown} />
-      }
-      <S.UpdatedAt>
-        <S.Item>
-          <p>{updatedAt || createdAt}</p>
-        </S.Item>
-      </S.UpdatedAt>
-      {
-        !forList && isOwner && (
-          <Flex>
-            <S.EditBtnWrapper>
-              <EditIcon
-                color="#565656"
-                boxSize={3}
-                cursor={"pointer"}
-                _hover={{ color: "#279df4" }}
-                onClick={() => setState('editing')}
-              />
-            </S.EditBtnWrapper>
-            <S.DeleteBtnWrapper>
-              <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
-            </S.DeleteBtnWrapper>
+        !isDeleted &&
+        <S.Container>
+          <Flex padding={{ base: "4px", md: "4px" }}>
+            <Avatar src={creator?.image} width={{ base: "16px", md: "24px" }} height={{ base: "16px", md: "24px" }} />
           </Flex>
-        )
+          <S.CreatorName>
+            <S.Item>
+              <p>{creator?.name}</p>
+            </S.Item>
+          </S.CreatorName>
+          {
+            state === 'default' &&
+            <S.CommentContent>
+              <S.Item>
+                <p>{comment?.content}</p>
+              </S.Item>
+            </S.CommentContent>
+          }
+          {
+            state === 'editing' &&
+            <Input value={contentInput} onChange={handleChangeContentInput} onKeyDown={handleKeyDown} />
+          }
+          <S.UpdatedAt>
+            <S.Item>
+              <p>{updatedAt || createdAt}</p>
+            </S.Item>
+          </S.UpdatedAt>
+          {
+            !forList && isOwner && (
+              <Flex>
+                <S.EditBtnWrapper>
+                  <EditIcon
+                    color="#565656"
+                    boxSize={3}
+                    cursor={"pointer"}
+                    _hover={{ color: "#279df4" }}
+                    onClick={() => setState('editing')}
+                  />
+                </S.EditBtnWrapper>
+                <S.DeleteBtnWrapper>
+                  <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
+                </S.DeleteBtnWrapper>
+              </Flex>
+            )
+          }
+        </S.Container>
       }
-    </S.Container>
+    </>
   );
 };
 
