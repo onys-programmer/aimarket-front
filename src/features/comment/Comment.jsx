@@ -126,8 +126,8 @@ export default function Comment({ comment, forList = false }) {
 
   return (
     <S.Container>
-      <Flex padding={{base: "4px", md: "4px"}}>
-      <Avatar src={creator?.image} width={{base: "16px", md: "24px"}} height={{base: "16px", md: "24px"}} />
+      <Flex padding={{ base: "4px", md: "4px" }}>
+        <Avatar src={creator?.image} width={{ base: "16px", md: "24px" }} height={{ base: "16px", md: "24px" }} />
       </Flex>
       <S.CreatorName>
         <S.Item>
@@ -192,7 +192,7 @@ const S = {
     /* padding: 3px; */
     width: 25%;
     * {
-      font-size: 1.8vh;
+      font-size: 1.3vh;
       color: #666666;
     }
 
@@ -212,7 +212,7 @@ const S = {
     align-items: start;
 
     * {
-      font-size: 1.8vh;
+      font-size: 1.3vh;
       color: #333333;
     }
     @media (max-width: 768px) {
@@ -226,7 +226,7 @@ const S = {
     width: 22%;
     align-items: start;
     * {
-      font-size: 1.4vh;
+      font-size: 1vh;
       color: #666666;
     }
     @media (max-width: 768px) {
