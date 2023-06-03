@@ -11,6 +11,7 @@ import { store } from "./app/store";
 import { Provider } from "react-redux";
 import NavBar from "./components/NavBar";
 import { updateToken, updateUser } from "./app/slice";
+import axios from "axios";
 
 const S = {
   IndexContainer: styled.div`
@@ -31,6 +32,23 @@ if (token) {
 if (user) {
   store.dispatch(updateUser(user));
 }
+
+// 전역 인터셉터를 추가합니다.
+axios.interceptors.request.use(config => {
+  document.body.style.cursor = "wait";
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+axios.interceptors.response.use(response => {
+  document.body.style.cursor = "default";
+  return response;
+}, error => {
+  document.body.style.cursor = "default";
+  return Promise.reject(error);
+});
+
 
 root.render(
   <ChakraProvider>
