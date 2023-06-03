@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
 import { Card, Input, Flex, Button, Textarea, Stack } from '@chakra-ui/react';
@@ -84,7 +84,7 @@ export default function PostDetailBox({ postId, boxState }) {
   // when edit
   const [titleInput, setTitleInput] = useState(post?.title);
   const [contentInput, setContentInput] = useState(post?.description);
-
+  console.log(contentInput, 'contentInput');
   useEffect(() => {
     setTitleInput(post?.title);
     setContentInput(post?.description);
@@ -169,7 +169,15 @@ export default function PostDetailBox({ postId, boxState }) {
           boxState === 'default' &&
           <S.TextArea>
             <S.Title><h3>{post?.title}</h3></S.Title>
-            <S.Description>{post?.description}</S.Description>
+            <S.Description>  {
+              post?.description.split('\n').map((line, index) => (
+                <Fragment key={index}>
+                  {line}
+                  <br />
+                </Fragment>
+              ))
+            }
+            </S.Description>
             <S.UserArea>
               <S.ProfileImage src={post?.creator?.image} />
               <S.UserName>{post?.creator?.name}</S.UserName>
@@ -200,7 +208,8 @@ export default function PostDetailBox({ postId, boxState }) {
               value={contentInput}
               height="100%"
               onChange={handleChangeContentInput}
-              cols="20" wrap="hard"
+              cols="20"
+              wrap="hard"
             />
             <Button colorScheme="blue" onClick={() => onEditPost()}>수정</Button>
           </Stack>
