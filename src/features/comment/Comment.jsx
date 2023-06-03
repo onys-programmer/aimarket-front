@@ -1,12 +1,12 @@
 import { Avatar, Textarea, Flex, Button } from "@chakra-ui/react";
 import axios from "axios";
 import styled from "@emotion/styled";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, Fragment } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../services/api/api";
 import DeleteCommentButton from "./DeleteCommentButton";
 import { parseRelativeDate } from "../../utils/util";
-import { EditIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
 
 export default function Comment({ comment, forList = false }) {
   const [creator, setCreator] = useState(null);
@@ -157,7 +157,16 @@ export default function Comment({ comment, forList = false }) {
             state === 'default' &&
             <S.CommentContent>
               <S.Item>
-                <p>{comment?.content}</p>
+                <p>
+                  {
+                    comment?.content.split('\n').map((line, index) => (
+                      <Fragment key={index}>
+                        {line}
+                        <br />
+                      </Fragment>
+                    ))
+                  }
+                </p>
               </S.Item>
             </S.CommentContent>
           }

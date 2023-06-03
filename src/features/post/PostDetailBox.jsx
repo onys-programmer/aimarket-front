@@ -169,14 +169,15 @@ export default function PostDetailBox({ postId, boxState }) {
           boxState === 'default' &&
           <S.TextArea>
             <S.Title><h3>{post?.title}</h3></S.Title>
-            <S.Description>  {
-              post?.description.split('\n').map((line, index) => (
-                <Fragment key={index}>
-                  {line}
-                  <br />
-                </Fragment>
-              ))
-            }
+            <S.Description>
+              {
+                post?.description.split('\n').map((line, index) => (
+                  <Fragment key={index}>
+                    {line}
+                    <br />
+                  </Fragment>
+                ))
+              }
             </S.Description>
             <S.UserArea>
               <S.ProfileImage src={post?.creator?.image} />
