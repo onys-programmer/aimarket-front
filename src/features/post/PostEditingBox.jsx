@@ -61,15 +61,35 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
   };
 
   const requestEditPost = async (data) => {
+    const formData = new FormData();
+    if (acceptedFiles.length > 0) {
+      formData.append('image', acceptedFiles[0]);
+    }
+
+    if (!titleInput) {
+      alert('제목을 입력해주세요.');
+      return;
+    }
+
+    if (titleInput > 50) {
+      alert('제목은 50자 이내로 작성해주세요.');
+      return;
+    }
+
+    if (contentInput > 500) {
+      alert('내용은 500자 이내로 작성해주세요.');
+      return;
+    }
+
+    formData.append('title', titleInput);
+    formData.append('description', contentInput);
     try {
-      const response = await axios.patch(`${BASE_URL}/posts/${post?.id}`, data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user?.token}`
-          }
-        }
-      );
+      const response = await axios.patch(`${BASE_URL}/posts/${post?.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${user?.token}`,
+        },
+      });
 
       await response.data;
       if (response?.status === 200) {
