@@ -1,13 +1,12 @@
-import { Avatar } from "@chakra-ui/react";
+import { Avatar, Textarea, Flex, Button } from "@chakra-ui/react";
 import axios from "axios";
 import styled from "@emotion/styled";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../services/api/api";
 import DeleteCommentButton from "./DeleteCommentButton";
 import { parseRelativeDate } from "../../utils/util";
-import { Flex, Input } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon, ArrowBackIcon } from "@chakra-ui/icons";
 
 export default function Comment({ comment, forList = false }) {
   const [creator, setCreator] = useState(null);
@@ -79,7 +78,8 @@ export default function Comment({ comment, forList = false }) {
   }, [comment?.content])
 
   const handleChangeContentInput = (e) => {
-    setContentInput(e.target.value)
+    setContentInput(e.target.value);
+    adjustTextareaHeight();
   }
 
   const requestEditComment = (commentId, data) => {
@@ -105,7 +105,7 @@ export default function Comment({ comment, forList = false }) {
     })
   };
 
-  const onEditComment = () => {
+  const onSaveComment = () => {
     const data = {
       content: contentInput
     };
@@ -116,14 +116,29 @@ export default function Comment({ comment, forList = false }) {
     requestEditComment(comment?._id, data);
   }
 
+  const handleClickSaveComment = () => {
+    onSaveComment();
+  };
+
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      onEditComment()
-    }
     if (e.key === 'Escape') {
       setState('default')
     }
-  }
+  };
+
+  const textareaRef = useRef(null);
+
+
+  const adjustTextareaHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  };
+
+  const handleClickCancelEdit = () => {
+    setState('default');
+  };
 
   return (
     <>
@@ -148,7 +163,13 @@ export default function Comment({ comment, forList = false }) {
           }
           {
             state === 'editing' &&
-            <Input value={contentInput} onChange={handleChangeContentInput} onKeyDown={handleKeyDown} />
+            <Textarea
+              ref={textareaRef}
+              size={"sm"}
+              value={contentInput}
+              onChange={handleChangeContentInput}
+              onKeyDown={handleKeyDown}
+            />
           }
           <S.UpdatedAt>
             <S.Item>
@@ -158,17 +179,49 @@ export default function Comment({ comment, forList = false }) {
           {
             !forList && isOwner && (
               <Flex>
+                {
+                  state === 'editing' &&
+                  <Flex gap={"3px"}>
+                    <Button
+                      fontSize={"1.2vh"}
+                      width={"fit-content"}
+                      marginTop={"0.4vh"}
+                      padding={"0.4vh 0.2vh"}
+                      height={"fit-content"}
+                      colorScheme="blue"
+                      onClick={handleClickSaveComment}
+                    >
+                      저장
+                    </Button>
+                    <Button
+                      fontSize={"1.2vh"}
+                      width={"fit-content"}
+                      marginTop={"0.4vh"}
+                      padding={"0.4vh 0.2vh"}
+                      height={"fit-content"}
+                      onClick={handleClickCancelEdit}
+                    >
+                      취소
+                    </Button>
+                  </Flex>
+                }
                 <S.EditBtnWrapper>
-                  <EditIcon
-                    color="#565656"
-                    boxSize={3}
-                    cursor={"pointer"}
-                    _hover={{ color: "#279df4" }}
-                    onClick={() => setState('editing')}
-                  />
+                  {
+                    state === 'default' &&
+                    <EditIcon
+                      color="#565656"
+                      boxSize={3}
+                      cursor={"pointer"}
+                      _hover={{ color: "#279df4" }}
+                      onClick={() => setState('editing')}
+                    />
+                  }
                 </S.EditBtnWrapper>
                 <S.DeleteBtnWrapper>
-                  <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
+                  {
+                    state === 'default' &&
+                    <DeleteCommentButton commentId={comment.id} onClickDeleteComment={handleClickDeleteComment} />
+                  }
                 </S.DeleteBtnWrapper>
               </Flex>
             )
