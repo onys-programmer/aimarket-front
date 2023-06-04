@@ -5,7 +5,7 @@ import LogInButton from './LogInButton';
 import { useSelector } from 'react-redux';
 
 export default function NavBar() {
-  const token = useSelector((state) => state.app.token);
+  const { token } = useSelector((state) => state.app.user);
 
   return (
     <>
@@ -19,10 +19,10 @@ export default function NavBar() {
         </a>
         <li>
           <a href='/posting'>
-            <Button 
-            colorScheme='red' 
-            borderRadius={'24px'}
-            fontSize={{base: "12px", md: "14px"}}
+            <Button
+              colorScheme='red'
+              borderRadius={'24px'}
+              fontSize={{ base: "12px", md: "14px" }}
             >만들기</Button>
           </a>
         </li>
@@ -47,10 +47,10 @@ export default function NavBar() {
             <S.NavItemAuth>
               <li>
                 <a href='/signup'>
-                  <Button 
-                    colorScheme='gray' 
-                    variant="outline"             
-                    fontSize={{base: "12px", md: "14px"}}
+                  <Button
+                    colorScheme='gray'
+                    variant="outline"
+                    fontSize={{ base: "12px", md: "14px" }}
                   >
                     회원 가입
                   </Button>

@@ -51,11 +51,10 @@ axios.interceptors.response.use(
   (error) => {
     // 오류가 401(Unauthorized)일 때 처리
     if (error.response.status === 401) {
-      // LocalStorage에서 사용자 정보 확인
-      const user = localStorage.getItem('user');
+      // Redux 상태에서 사용자 정보 확인
+      const user = store.getState().user;
       if (user) {
         // 사용자 정보가 있을 경우 로그아웃 처리
-
         store.dispatch(logOut());
         if (window.confirm('로그인이 만료되었습니다. 다시 로그인해주세요.')) {
           window.location.href = '/';
@@ -66,7 +65,6 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
 
 
 root.render(

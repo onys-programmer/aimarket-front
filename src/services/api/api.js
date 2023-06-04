@@ -2,6 +2,10 @@ import axios from 'axios';
 
 const BASE_URL = 'https://aimarket.herokuapp.com/api';
 
+const api = axios.create({
+  baseURL: BASE_URL,
+});
+
 const fetchPostByIndex = async (index) => {
   try {
     const response = await axios.get(`/posts/index/${index}`);
@@ -12,5 +16,15 @@ const fetchPostByIndex = async (index) => {
   }
 };
 
-export { BASE_URL, fetchPostByIndex };
+export const deleteUser = async (userId) => {
+  const data = { userId };
+  try {
+    const response = await api.delete(`/users`, data);
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response.data);
+  }
+};
+
+export { BASE_URL, fetchPostByIndex, api };
 

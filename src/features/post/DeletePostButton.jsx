@@ -17,12 +17,11 @@ export default function DeletePostButton({ post }) {
   }, [post]);
 
   const requestDeletePost = async () => {
-    const token = localStorage.getItem('token');
     try {
       const response = await fetch(`${BASE_URL}/posts/${post.id}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       });
       if (response.status === 200) {

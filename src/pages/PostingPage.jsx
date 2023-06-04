@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 
 export default function PostingPage() {
   const navigate = useNavigate();
-  const token = useSelector((state) => state.app.token);
+  const { token } = useSelector((state) => state.app.user);
 
   useEffect(() => {
     if (token === "") {
