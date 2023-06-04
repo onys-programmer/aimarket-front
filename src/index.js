@@ -10,7 +10,7 @@ import styled from "@emotion/styled";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import NavBar from "./components/NavBar";
-import { updateToken, updateUser } from "./app/slice";
+import { updateUser, logOut } from "./app/slice";
 import axios from "axios";
 
 const S = {
@@ -21,14 +21,10 @@ const S = {
   `,
 };
 
-const token = localStorage.getItem("token");
 const user = JSON.parse(localStorage.getItem("user"));
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-if (token) {
-  store.dispatch(updateToken(token));
-}
 if (user) {
   store.dispatch(updateUser(user));
 }
@@ -59,7 +55,8 @@ axios.interceptors.response.use(
       const user = localStorage.getItem('user');
       if (user) {
         // 사용자 정보가 있을 경우 로그아웃 처리
-        store.dispatch(updateUser(null));
+
+        store.dispatch(logOut());
         if (window.confirm('로그인이 만료되었습니다. 다시 로그인해주세요.')) {
           window.location.href = '/';
         }

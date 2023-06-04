@@ -16,7 +16,7 @@ export const slice = createSlice({
       localStorage.setItem('user', JSON.stringify(action.payload));
       state.user = action.payload;
     },
-    deleteUser: (state) => {
+    logOut: (state) => {
       localStorage.removeItem('user');
       state.user = null;
     },
@@ -46,7 +46,7 @@ export const slice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   updateUser,
-  deleteUser,
+  logOut,
   updateToken,
   deleteToken,
   updateMainPosts,

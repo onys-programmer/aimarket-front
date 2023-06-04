@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { deleteToken, deleteUser } from "../app/slice";
+import { deleteToken, logOut } from "../app/slice";
 import { Button } from "@chakra-ui/react";
 
 export default function LogOutButton() {
@@ -7,7 +7,7 @@ export default function LogOutButton() {
 
   const handleClickLogOut = () => {
     dispatch(deleteToken());
-    dispatch(deleteUser());
+    dispatch(logOut());
     // redirect to main page
     window.location.href = '/';
   };
