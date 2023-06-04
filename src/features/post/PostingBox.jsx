@@ -132,7 +132,7 @@ export default function PostingBox() {
             </aside>
           </section>
         </S.DropZone>
-        <Stack width="100%" height="100%">
+        <Stack width="50%" height="100%">
           <Input placeholder='제목' size="lg" onChange={handleChangeTitle} value={titleInput} />
           <Textarea placeholder='내용' height="100%" onChange={handleChangeContent} value={contentInput} />
           <Button colorScheme='red' onClick={handleSubmit}>
