@@ -9,33 +9,12 @@ import { parseRelativeDate } from "../../utils/util";
 import { EditIcon } from "@chakra-ui/icons";
 
 export default function Comment({ comment, forList = false }) {
-  const [creator, setCreator] = useState(null);
   const user = useSelector((state) => state.app.user);
-  const [isOwner, setIsOwner] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
-
-  useEffect(() => {
-    if (comment) {
-      const isOwner = creator?._id === user?.userId && creator !== null && user !== null;
-      setIsOwner(isOwner);
-      // console.log(creator, user, isOwner, "isOwner")
-    }
-  }, [comment, creator, user]);
-
-  const fetchUser = async (userId) => {
-    try {
-      const response = await axios.get(`${BASE_URL}/users/${userId}`);
-      const result = await response.data;
-      setCreator(result.user);
-    } catch (error) {
-      console.log(error, "error");
-    }
-  };
-
-  useEffect(() => {
-    fetchUser(comment?.creator);
-  }, [comment]);
-
+  const { creator, content } = comment;
+  const { name: creatorName, image: creatorImage } = creator;
+  const canEdit = creator?._id === user?.userId;
+  const date = parseRelativeDate(comment.createdAt || comment.updatedAt);
 
   const requestDeleteComment = async (commentId) => {
     try {
@@ -66,9 +45,6 @@ export default function Comment({ comment, forList = false }) {
     requestDeleteComment(commentId);
   };
   // console.log(comment);
-
-  const createdAt = parseRelativeDate(comment?.createdAt);
-  const updatedAt = comment?.updatedAt ? parseRelativeDate(comment?.updatedAt) : null;
 
   const [state, setState] = useState('default')
   const [contentInput, setContentInput] = useState(comment?.content)
@@ -146,11 +122,11 @@ export default function Comment({ comment, forList = false }) {
         !isDeleted &&
         <S.Container>
           <Flex padding={{ base: "4px", md: "4px" }}>
-            <Avatar src={creator?.image} width={{ base: "16px", md: "24px" }} height={{ base: "16px", md: "24px" }} />
+            <Avatar src={creatorImage} width={{ base: "16px", md: "24px" }} height={{ base: "16px", md: "24px" }} />
           </Flex>
           <S.CreatorName>
             <S.Item>
-              <p>{creator?.name}</p>
+              <p>{creatorName}</p>
             </S.Item>
           </S.CreatorName>
           {
@@ -159,7 +135,7 @@ export default function Comment({ comment, forList = false }) {
               <S.Item>
                 <p>
                   {
-                    comment?.content.split('\n').map((line, index) => (
+                    content.split('\n').map((line, index) => (
                       <Fragment key={index}>
                         {line}
                         <br />
@@ -182,11 +158,11 @@ export default function Comment({ comment, forList = false }) {
           }
           <S.UpdatedAt>
             <S.Item>
-              <p>{updatedAt || createdAt}</p>
+              <p>{date}</p>
             </S.Item>
           </S.UpdatedAt>
           {
-            !forList && isOwner && (
+            !forList && canEdit && (
               <Flex>
                 {
                   state === 'editing' &&

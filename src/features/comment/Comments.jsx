@@ -3,7 +3,7 @@ import { Stack } from '@chakra-ui/react';
 import Comment from './Comment';
 import styled from '@emotion/styled';
 
-export default function Comments({ comments, forList = false }) {
+export default function Comments({ comments, forList = false, isMine }) {
   const navigate = useNavigate();
 
   const goToPost = (postId) => {
@@ -23,10 +23,10 @@ export default function Comments({ comments, forList = false }) {
           return (
             forList ?
               <S.CommentRow onClick={() => handleClickGoToPost(comment)}>
-                <Comment comment={comment} forList={forList} />
+                <Comment comment={comment} forList={forList} isMine={isMine} />
               </S.CommentRow>
               :
-              <Comment comment={comment} forList={forList} />
+              <Comment comment={comment} forList={forList} isMine={isMine} />
           );
         })
       }

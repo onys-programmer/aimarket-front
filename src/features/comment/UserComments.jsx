@@ -1,30 +1,22 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import { BASE_URL } from "../../services/api/api";
 import Comments from "./Comments";
-import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function UserComments({ userId }) {
-  const [pageNum, setPageNum] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const user = useSelector((state) => state.app.user);
+  const [creator, setCreator] = useState(null);
   const [comments, setComments] = useState([]);
 
-  const fetchComments = async (userId, pageNum) => {
+  const isMine = creator?.userId === user?.userId;
+
+  const fetchUser = async (userId) => {
     try {
-      const response = await axios.get(`${BASE_URL}/comments/user/${userId}`, {
-        params: {
-          page: pageNum,
-          perPage: 20,
-        },
-      });
-      const { comments, isLastPage } = await response.data;
-
-      if (isLastPage) {
-        console.log("isLastPage");
-        setHasMore(false);
-      }
-
-      setComments((prev) => prev.concat(comments));
+      const response = await axios.get(`${BASE_URL}/users/${userId}`);
+      const result = await response.data;
+      setCreator(result.user);
+      setComments(result.user.comments);
     } catch (error) {
       console.log(error, "error");
     }
@@ -32,30 +24,11 @@ export default function UserComments({ userId }) {
 
   useEffect(() => {
     if (userId) {
-      fetchComments(userId, 1);
+      fetchUser(userId);
     }
   }, [userId]);
 
-  const fetchNextComments = () => {
-    // console.log("fetchNextComments");
-    fetchComments(userId, pageNum + 1);
-    setPageNum(pageNum + 1);
-  };
-
   return (
-    <InfiniteScroll
-      dataLength={comments.length}
-      next={fetchNextComments}
-      hasMore={hasMore}
-      loader={<></>}
-      endMessage={
-        <p style={{ textAlign: 'center' }}>
-          더 이상 댓글이 없습니다.
-        </p>
-      }
-    >
-      <Comments comments={comments} forList={true} />
-    </InfiniteScroll>
-
+    <Comments comments={comments} forList={true} isMine={isMine} />
   );
 };
