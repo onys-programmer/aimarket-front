@@ -7,7 +7,9 @@ import CommentsBox from "../features/my-page/CommentsBox";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import ChangePasswordBox from "../features/my-page/ChangePasswordBox";
-import { deleteUser } from "../app/slice";
+import axios from "axios";
+import { BASE_URL } from "../services/api/api";
+import { logOut } from "../app/slice";
 
 export default function MyPage() {
   const dispatch = useDispatch();
@@ -27,9 +29,26 @@ export default function MyPage() {
     }
   };
 
+  const requestDeleteUser = async () => {
+    const data = { userId: user?.userId };
+    try {
+      await axios.delete(`${BASE_URL}/users`, {
+        data: data,
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(logOut());
+    } catch (error) {
+      alert("회원 탈퇴에 실패했습니다.");
+      console.log(error);
+    }
+  };
+
   const handleClickConfirmDeleteUser = () => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
-      dispatch(deleteUser())
+      requestDeleteUser();
     }
   }
 

@@ -5,7 +5,7 @@ import LogInButton from './LogInButton';
 import { useSelector } from 'react-redux';
 
 export default function NavBar() {
-  const { token } = useSelector((state) => state.app.user);
+  const user = useSelector((state) => state.app.user);
 
   return (
     <>
@@ -27,7 +27,7 @@ export default function NavBar() {
           </a>
         </li>
         {
-          token
+          user?.token
             ?
             <Flex alignItems="center" gap="20px" marginLeft="auto">
               <a href='/mypage'>

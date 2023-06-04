@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { api } from '../services/api/api';
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   user: null,
@@ -8,22 +7,6 @@ const initialState = {
   uploadedPostImage: null,
   currentPostComments: [],
 }
-
-// deleteUser API 요청을 위한 비동기 액션 생성자
-export const requestDeleteUser = createAsyncThunk('user/deleteUser', async (userId, thunkAPI) => {
-  try {
-    // deleteUser API 호출
-    await api.deleteUser(userId);
-    // 로그아웃 처리
-    thunkAPI.dispatch(logOut());
-    if (window.confirm('회원 탈퇴가 완료되었습니다.')) {
-      window.location.href = '/';
-    }
-  } catch (error) {
-    // 오류 처리
-    return thunkAPI.rejectWithValue(error.response.data);
-  }
-});
 
 export const slice = createSlice({
   name: 'app',
@@ -44,10 +27,6 @@ export const slice = createSlice({
     deleteToken: (state) => {
       state.token = "";
       localStorage.removeItem('token');
-    },
-    deleteUser: (state) => {
-      localStorage.removeItem('user');
-      state.user = null;
     },
     updateMainPosts: (state, action) => {
       state.mainPosts = action.payload;
@@ -70,7 +49,6 @@ export const {
   logOut,
   updateToken,
   deleteToken,
-  deleteUser,
   updateMainPosts,
   addMainPosts,
   updateUploadedPostImage,
