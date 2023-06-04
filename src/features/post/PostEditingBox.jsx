@@ -27,7 +27,7 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
   });
 
   const acceptedFileItems = acceptedFiles.map(file => (
-    <li key={file.path}>
+    <li key={file.path} style={{ width: "50%" }}>
       {file.path} - {file.size} bytes
     </li>
   ));
@@ -151,7 +151,7 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
         {
           boxState === 'editing' &&
             replaceImage ?
-            <Stack width={"100%"}>
+            <Stack width={"50%"}>
               <SmallCloseIcon
                 boxSize={7}
                 cursor="pointer"
@@ -196,7 +196,7 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
         }
         {
           boxState === 'editing' &&
-          <Stack width="100%" height="68vh">
+          <Stack width="50%" height="68vh">
             <Input size="lg" placeholder='제목을 입력하세요.' value={titleInput} onChange={handleChangeTitleInput} />
             <Textarea
               placeholder='내용을 입력하세요.'
@@ -246,7 +246,7 @@ const S = {
     flex-direction: column;
     justify-content: start;
     gap: 24px;
-    width: 100%;
+    width: 50%;
     height: 68vh;
     max-height: 68vh;
     @media (max-width: 768px) {
@@ -311,7 +311,7 @@ const S = {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 50%;
     height: 92.3%;
     border: 1px solid #ddd;
     background-color: #fafafa;

@@ -149,7 +149,7 @@ const S = {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
+    width: 50%;
     border: 1px solid #ddd;
     background-color: #fafafa;
     color: #7d7d7d;

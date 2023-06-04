@@ -49,6 +49,28 @@ axios.interceptors.response.use(response => {
   return Promise.reject(error);
 });
 
+// Axios 인터셉터
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    // 오류가 401(Unauthorized)일 때 처리
+    if (error.response.status === 401) {
+      // LocalStorage에서 사용자 정보 확인
+      const user = localStorage.getItem('user');
+      if (user) {
+        // 사용자 정보가 있을 경우 로그아웃 처리
+        store.dispatch(updateUser(null));
+        if (window.confirm('로그인이 만료되었습니다. 다시 로그인해주세요.')) {
+          window.location.href = '/';
+        }
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+
 
 root.render(
   <ChakraProvider>
