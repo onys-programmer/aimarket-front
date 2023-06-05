@@ -36,8 +36,10 @@ export default function SignUpBox() {
 
   const requestSignUp = async () => {
     const formData = new FormData();
-    const profileImageFile = convertBase64ToFile(profileImageBase64);
-    formData.append('image', profileImageFile);
+    if (profileImageBase64) {
+      const profileImageFile = convertBase64ToFile(profileImageBase64);
+      formData.append('image', profileImageFile);
+    }
     formData.append('name', nameInput);
     formData.append('email', emailInput);
     formData.append('password', passwordInput);

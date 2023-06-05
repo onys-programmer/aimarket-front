@@ -6,9 +6,9 @@ import { Card, CardBody, CardHeader, Flex, Text, Stack, Button, Avatar } from '@
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
 import styled from '@emotion/styled';
+import { DEFAULT_PROFILE_IMAGE_URL } from '../static/constants';
 
 export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
-  const DEFAULT_PROFILE_IMAGE = "https://i.pinimg.com/280x280_RS/6b/71/20/6b7120f396928249c8e50953e64d81f5.jpg";
   const customStyles = {
     content: {
       top: '50%',
@@ -66,7 +66,7 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
   }
 
   const saveModal = () => {
-    dispatch(updateProfileImage(profileImageTemp || DEFAULT_PROFILE_IMAGE));
+    dispatch(updateProfileImage(profileImageTemp || DEFAULT_PROFILE_IMAGE_URL));
 
     if (selectedFile) {
       const reader = new FileReader();
@@ -75,6 +75,8 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
         const base64String = reader.result;
         dispatch(updateProfileImageBase64(base64String));
       }
+    } else {
+      dispatch(updateProfileImageBase64(null));
     }
     closeModal();
   }
@@ -89,14 +91,17 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
   };
 
   const handleClickResetTempImage = () => {
-    cancelUpload();
-  };
-
-  const cancelUpload = () => {
     setSelectedFile(null);
     setProfileImageTemp("");
     acceptedFiles.pop();
-  }
+  };
+
+  const handleClickSetDefaultProfileImage = () => {
+    setSelectedFile(null);
+    setProfileImageTemp(DEFAULT_PROFILE_IMAGE_URL);
+    acceptedFiles.pop();
+  };
+
 
   const handleEscCancelModal = (e) => {
     if (e.key === 'Escape') {
@@ -105,10 +110,6 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
   };
 
   const FILE_NOTICE = selectedFile ? "" : "이 없습니다.";
-
-  const handleClickSetDefaultImage = () => {
-    setProfileImageTemp(DEFAULT_PROFILE_IMAGE);
-  };
 
   return (
     <ReactModal
@@ -135,7 +136,7 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
           <Stack>
             <div>프로필 사진을 변경하시겠습니까?</div>
             <Text width={"fit-content"} cursor={"pointer"} color={"#666"} _hover={{ color: "#279df4" }}
-              onClick={handleClickSetDefaultImage}
+              onClick={handleClickSetDefaultProfileImage}
             >
               기본 프로필로
             </Text>
@@ -158,7 +159,14 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
             {
               profileImageTemp && (
                 <Stack alignItems={"center"} gap={3}>
-                  <SmallCloseIcon marginLeft="50%" marginTop={"auto"} color="#777" cursor={"pointer"} _hover={{ color: "red" }} onClick={handleClickResetTempImage} />
+                  <SmallCloseIcon
+                    marginLeft="50%"
+                    marginTop={"auto"}
+                    color="#777"
+                    cursor={"pointer"}
+                    _hover={{ color: "red" }}
+                    onClick={handleClickResetTempImage}
+                  />
                   <Avatar size={"2xl"} src={profileImageTemp} alt="Uploaded" />
                   <Button onClick={handleConfirmImage} colorScheme={"blue"}>
                     확인
