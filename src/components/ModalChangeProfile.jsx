@@ -1,7 +1,8 @@
 import ReactModal from 'react-modal';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { updateProfileUploadModalVisibility } from '../app/slice';
-import { Card, CardBody, CardHeader, Flex, Text, Stack } from '@chakra-ui/react';
+import { Card, CardBody, CardHeader, Flex, Text, Stack, Image, Button } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
 import styled from '@emotion/styled';
@@ -24,6 +25,7 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
   const closeModal = () => {
     dispatch(updateProfileUploadModalVisibility(false));
   };
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const {
     acceptedFiles,
@@ -34,6 +36,9 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
       'image/jpg': [],
       'image/jpeg': [],
       'image/png': []
+    },
+    onDrop: (acceptedFiles) => {
+      setSelectedFile(acceptedFiles[0]);
     }
   });
 
@@ -42,6 +47,15 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
       {file.path} - {file.size} bytes
     </li>
   ));
+
+  const handleCloseModal = () => {
+    dispatch(updateProfileUploadModalVisibility(false));
+  };
+
+  const handleConfirmImage = () => {
+    // image dispatch
+    handleCloseModal();
+  };
 
   return (
     <ReactModal
@@ -63,19 +77,30 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
         <CardBody>
           <Stack>
             <div>프로필 사진을 변경하시겠습니까?</div>
-            <S.DropZone {...getRootProps({ className: 'dropzone' })}>
-              <section className="container" >
-                <div>
-                  <input {...getInputProps()} />
-                  <p>드래그 앤 드롭 혹은 클릭하여 파일을 올려주세요</p>
-                  <em>(10mb 이내의 jpg, jpeg, png 파일만 가능합니다.)</em>
-                </div>
-                <aside>
-                  <Text fontSize={"100%"}>올라간 파일</Text>
-                  <Text fontSize={"150%"}>{acceptedFileItems}</Text>
-                </aside>
-              </section>
-            </S.DropZone>
+            {
+              !selectedFile &&
+              <S.DropZone {...getRootProps({ className: 'dropzone' })}>
+                <section className="container" >
+                  <div>
+                    <input {...getInputProps()} />
+                    <p>드래그 앤 드롭 혹은 클릭하여 파일을 올려주세요</p>
+                    <em>(10mb 이내의 jpg, jpeg, png 파일만 가능합니다.)</em>
+                  </div>
+                  <aside>
+                    <Text fontSize={"100%"}>올라간 파일</Text>
+                    <Text fontSize={"150%"}>{acceptedFileItems}</Text>
+                  </aside>
+                </section>
+              </S.DropZone>
+            }
+            {selectedFile && (
+              <Stack>
+                <Image src={URL.createObjectURL(selectedFile)} alt="Uploaded" />
+                <Button onClick={handleConfirmImage} colorScheme={"blue"}>
+                  확인
+                </Button>
+              </Stack>
+            )}
           </Stack>
         </CardBody>
       </Card>
