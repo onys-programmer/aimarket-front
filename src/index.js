@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import NavBar from "./components/NavBar";
 import { updateUser, logOut } from "./app/slice";
 import axios from "axios";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import ModalChangeProfile from "./components/ModalChangeProfile";
 
 const S = {
@@ -32,20 +32,26 @@ if (user) {
 }
 
 // 전역 인터셉터를 추가합니다.
-axios.interceptors.request.use(config => {
-  document.body.style.cursor = "wait";
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+axios.interceptors.request.use(
+  (config) => {
+    document.body.style.cursor = "wait";
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
-axios.interceptors.response.use(response => {
-  document.body.style.cursor = "default";
-  return response;
-}, error => {
-  document.body.style.cursor = "default";
-  return Promise.reject(error);
-});
+axios.interceptors.response.use(
+  (response) => {
+    document.body.style.cursor = "default";
+    return response;
+  },
+  (error) => {
+    document.body.style.cursor = "default";
+    return Promise.reject(error);
+  }
+);
 
 // Axios 인터셉터
 axios.interceptors.response.use(
@@ -54,12 +60,12 @@ axios.interceptors.response.use(
     // 오류가 401(Unauthorized)일 때 처리
     if (error.response.status === 401) {
       // Redux 상태에서 사용자 정보 확인
-      const user = store.getState().user;
+      const user = store.getState().app.user;
       if (user) {
         // 사용자 정보가 있을 경우 로그아웃 처리
         store.dispatch(logOut());
-        if (window.confirm('로그인이 만료되었습니다. 다시 로그인해주세요.')) {
-          window.location.href = '/';
+        if (window.confirm("로그인이 만료되었습니다. 다시 로그인해주세요.")) {
+          window.location.href = "/";
         }
       }
     }
@@ -68,7 +74,7 @@ axios.interceptors.response.use(
   }
 );
 
-Modal.setAppElement('#root');
+Modal.setAppElement("#root");
 
 root.render(
   <ChakraProvider>
