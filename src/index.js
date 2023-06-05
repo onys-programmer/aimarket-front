@@ -12,6 +12,8 @@ import { Provider } from "react-redux";
 import NavBar from "./components/NavBar";
 import { updateUser, logOut } from "./app/slice";
 import axios from "axios";
+import Modal from 'react-modal';
+import ModalChangeProfile from "./components/ModalChangeProfile";
 
 const S = {
   IndexContainer: styled.div`
@@ -66,6 +68,7 @@ axios.interceptors.response.use(
   }
 );
 
+Modal.setAppElement('#root');
 
 root.render(
   <ChakraProvider>
@@ -74,6 +77,7 @@ root.render(
       <S.IndexContainer>
         <RouterProvider router={router} style={{ marginTop: "70px" }} />
       </S.IndexContainer>
+      <ModalChangeProfile />
     </Provider>
   </ChakraProvider>
 );

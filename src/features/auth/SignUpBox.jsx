@@ -5,6 +5,7 @@ import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
+import ProfileAvater from '../../components/ProfileAvatar';
 
 export default function SignUpBox() {
   const navigate = useNavigate();
@@ -131,6 +132,7 @@ export default function SignUpBox() {
           <S.Title>회원 가입</S.Title>
         </S.TitleWrapper>
         <Stack spacing={3} width="100%">
+          <ProfileAvater />
           <Input placeholder="이름" onChange={onChangeNameInput} />
           <Input placeholder="email" onChange={onChangeEmailInput} />
           <Stack spacing={1}>
