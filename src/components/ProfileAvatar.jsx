@@ -7,7 +7,6 @@ export default function ProfileAvater({ src }) {
   const handleClickOpenProfileModal = () => {
     dispatch(updateProfileUploadModalVisibility(true));
   };
-  console.log(src, "src at profile avatar")
 
   return (
     <Avatar src={src} cursor={"pointer"} onClick={handleClickOpenProfileModal} />

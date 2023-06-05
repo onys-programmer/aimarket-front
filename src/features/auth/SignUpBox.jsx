@@ -1,16 +1,20 @@
 import styled from '@emotion/styled';
 import { Input, Button, Stack, Card } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ProfileAvater from '../../components/ProfileAvatar';
+import { updateProfileImage, updateProfileImageBase64 } from '../../app/slice';
+import { convertBase64ToFile } from '../../utils/util';
 
 export default function SignUpBox() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const profileImage = useSelector((state) => state.app.profileImage);
-console.log(profileImage, "profileImage at signup box")
+  const profileImageBase64 = useSelector((state) => state.app.profileImageBase64);
+
   const [nameInput, setNameInput] = useState('');
   const [emailInput, setEmailInput] = useState('');
   const [memorableDateInput, setMemorableDateInput] = useState('');
@@ -30,15 +34,25 @@ console.log(profileImage, "profileImage at signup box")
     setPasswordCheckInput(e.target.value);
   };
 
-  const requestSignUp = async (data) => {
+  const requestSignUp = async () => {
+    const formData = new FormData();
+    const profileImageFile = convertBase64ToFile(profileImageBase64);
+    formData.append('image', profileImageFile);
+    formData.append('name', nameInput);
+    formData.append('email', emailInput);
+    formData.append('password', passwordInput);
+    formData.append('memorableDate', memorableDateInput);
+
     try {
       const response = await axios.post(`${BASE_URL}/users/signup`,
-        data,
+        formData,
         {
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'multipart/form-data' }
         }
       );
       if (response.status === 201) {
+        dispatch(updateProfileImage(""));
+        dispatch(updateProfileImageBase64(""));
         alert('회원가입에 성공하였습니다.');
         navigate('/login');
       } else {
@@ -88,13 +102,7 @@ console.log(profileImage, "profileImage at signup box")
       alert('비밀번호가 일치하지 않습니다.');
       return;
     } else {
-      const data = {
-        name: nameInput,
-        email: emailInput,
-        password: passwordInput,
-        memorableDate: memorableDateInput
-      };
-      requestSignUp(data);
+      requestSignUp();
     }
   };
 
@@ -134,7 +142,7 @@ console.log(profileImage, "profileImage at signup box")
           <S.Title>회원 가입</S.Title>
         </S.TitleWrapper>
         <Stack spacing={3} width="100%">
-          <ProfileAvater src={profileImage}/>
+          <ProfileAvater src={profileImage} />
           <Input placeholder="이름" onChange={onChangeNameInput} />
           <Input placeholder="email" onChange={onChangeEmailInput} />
           <Stack spacing={1}>

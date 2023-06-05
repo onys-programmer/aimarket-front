@@ -8,6 +8,7 @@ const initialState = {
   currentPostComments: [],
   profileUploadModalVisibility: false,
   profileImage: "",
+  profileImageBase64: "",
 };
 
 export const slice = createSlice({
@@ -48,6 +49,9 @@ export const slice = createSlice({
     updateProfileImage: (state, action) => {
       state.profileImage = action.payload;
     },
+    updateProfileImageBase64: (state, action) => {
+      state.profileImageBase64 = action.payload;
+    },
   },
 });
 
@@ -63,6 +67,7 @@ export const {
   updateCurrentPostComments,
   updateProfileUploadModalVisibility,
   updateProfileImage,
+  updateProfileImageBase64,
 } = slice.actions;
 
 export default slice.reducer;

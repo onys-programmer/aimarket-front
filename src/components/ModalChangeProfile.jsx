@@ -1,7 +1,7 @@
 import ReactModal from 'react-modal';
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { updateProfileUploadModalVisibility, updateProfileImage } from '../app/slice';
+import { updateProfileUploadModalVisibility, updateProfileImage, updateProfileImageBase64 } from '../app/slice';
 import { Card, CardBody, CardHeader, Flex, Text, Stack, Button, Avatar } from '@chakra-ui/react';
 import { SmallCloseIcon } from '@chakra-ui/icons';
 import { useDropzone } from 'react-dropzone';
@@ -67,6 +67,15 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
 
   const saveModal = () => {
     dispatch(updateProfileImage(profileImageTemp || DEFAULT_PROFILE_IMAGE));
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        dispatch(updateProfileImageBase64(base64String));
+      }
+    }
     closeModal();
   }
 
@@ -79,7 +88,7 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
     saveModal();
   };
 
-  const handleClickResetTempImage= () => {
+  const handleClickResetTempImage = () => {
     cancelUpload();
   };
 
@@ -95,7 +104,7 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
     }
   };
 
-  const FILE_NOTICE = selectedFile ? "": "이 없습니다.";
+  const FILE_NOTICE = selectedFile ? "" : "이 없습니다.";
 
   const handleClickSetDefaultImage = () => {
     setProfileImageTemp(DEFAULT_PROFILE_IMAGE);
@@ -125,14 +134,14 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
         <CardBody>
           <Stack>
             <div>프로필 사진을 변경하시겠습니까?</div>
-            <Text width={"fit-content"} cursor={"pointer"} color={"#666"} _hover={{color: "#279df4"}}
-            onClick={handleClickSetDefaultImage}
+            <Text width={"fit-content"} cursor={"pointer"} color={"#666"} _hover={{ color: "#279df4" }}
+              onClick={handleClickSetDefaultImage}
             >
               기본 프로필로
             </Text>
             {
               !profileImageTemp &&
-                <S.DropZone {...getRootProps({ className: 'dropzone' })}>
+              <S.DropZone {...getRootProps({ className: 'dropzone' })}>
                 <section className="container" >
                   <div>
                     <input {...getInputProps()} />
@@ -148,14 +157,14 @@ export default function ModalChangeProfile({ afterOpenModal = () => { } }) {
             }
             {
               profileImageTemp && (
-              <Stack alignItems={"center"} gap={3}>
-                <SmallCloseIcon marginLeft="50%" marginTop={"auto"} color="#777" cursor={"pointer"} _hover={{ color: "red" }} onClick={handleClickResetTempImage} />
-                <Avatar size={"2xl"} src={profileImageTemp} alt="Uploaded" />
-                <Button onClick={handleConfirmImage} colorScheme={"blue"}>
-                  확인
-                </Button>
-              </Stack>
-            )}
+                <Stack alignItems={"center"} gap={3}>
+                  <SmallCloseIcon marginLeft="50%" marginTop={"auto"} color="#777" cursor={"pointer"} _hover={{ color: "red" }} onClick={handleClickResetTempImage} />
+                  <Avatar size={"2xl"} src={profileImageTemp} alt="Uploaded" />
+                  <Button onClick={handleConfirmImage} colorScheme={"blue"}>
+                    확인
+                  </Button>
+                </Stack>
+              )}
           </Stack>
         </CardBody>
       </Card>
