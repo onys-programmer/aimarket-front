@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
@@ -7,27 +7,28 @@ const initialState = {
   uploadedPostImage: null,
   currentPostComments: [],
   profileUploadModalVisibility: false,
-}
+  profileImage: "",
+};
 
 export const slice = createSlice({
-  name: 'app',
+  name: "app",
   initialState,
   reducers: {
     updateUser: (state, action) => {
-      localStorage.setItem('user', JSON.stringify(action.payload));
+      localStorage.setItem("user", JSON.stringify(action.payload));
       state.user = action.payload;
     },
     logOut: (state) => {
-      localStorage.removeItem('user');
+      localStorage.removeItem("user");
       state.user = null;
     },
     updateToken: (state, action) => {
       state.token = action.payload;
-      localStorage.setItem('token', action.payload);
+      localStorage.setItem("token", action.payload);
     },
     deleteToken: (state) => {
       state.token = "";
-      localStorage.removeItem('token');
+      localStorage.removeItem("token");
     },
     updateMainPosts: (state, action) => {
       state.mainPosts = action.payload;
@@ -44,8 +45,11 @@ export const slice = createSlice({
     updateProfileUploadModalVisibility: (state, action) => {
       state.profileUploadModalVisibility = action.payload;
     },
+    updateProfileImage: (state, action) => {
+      state.profileImage = action.payload;
+    },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
 export const {
@@ -58,6 +62,7 @@ export const {
   updateUploadedPostImage,
   updateCurrentPostComments,
   updateProfileUploadModalVisibility,
+  updateProfileImage,
 } = slice.actions;
 
 export default slice.reducer;
