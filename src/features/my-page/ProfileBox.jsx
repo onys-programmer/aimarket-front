@@ -1,14 +1,72 @@
-import { useSelector } from "react-redux";
-import { Avatar, Stack } from "@chakra-ui/react";
+import { useSelector, useDispatch } from "react-redux";
+import { Avatar, Button, Stack, Card } from "@chakra-ui/react";
+import { updateProfileImage, updateProfileUploadModalVisibility, updateProfileImageBase64, updateUserProfileImage } from "../../app/slice";
+import { convertBase64ToFile } from "../../utils/util";
+import axios from "axios";
+import { BASE_URL } from "../../services/api/api";
 import styled from "@emotion/styled";
+import ProfileAvater from "../../components/ProfileAvatar";
 
 export default function ProfileBox() {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.app.user);
-  // console.log(user);
+  const profileImage = useSelector((state) => state.app.profileImage);
+  const profileImageBase64 = useSelector((state) => state.app.profileImageBase64);
+
+  const requestUpdateProfileImage = async () => {
+    const formData = new FormData();
+    const profileImageFile = convertBase64ToFile(profileImageBase64);
+    formData.append('image', profileImageFile);
+    formData.append('userId', user?.userId);
+
+    try {
+      const response = await axios.patch(`${BASE_URL}/users/change-profile-image`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${user?.token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      if (response.status === 200) {
+        dispatch(updateUserProfileImage(profileImage));
+        dispatch(updateProfileImage(""));
+        dispatch(updateProfileImageBase64(""));
+        alert('프로필 이미지가 변경되었습니다.');
+      }
+    } catch (error) {
+      alert('프로필 이미지 변경에 실패하였습니다.');
+    }
+  };
+
+  const handleClickSaveProfileImage = () => {
+    if (profileImageBase64) {
+      requestUpdateProfileImage();
+    }
+  };
+
+  const handleClickOpenModal = () => {
+    dispatch(updateProfileUploadModalVisibility(true));
+  };
+
   return (
     <S.Container>
       <Stack alignItems="center">
-        <Avatar src={user?.image} />
+        {
+          profileImage ?
+            <Card width="90%" maxW="400px" padding={3}>
+              <Stack alignItems={"center"}>
+                <Avatar src={profileImage} onClick={handleClickOpenModal} />
+                <Button size={"sm"} onClick={handleClickSaveProfileImage} colorScheme="green">
+                  저장
+                </Button>
+              </Stack>
+            </Card>
+            :
+            <ProfileAvater src={user?.image} onClick={handleClickOpenModal} />
+        }
+
         <S.Name>
           {user?.name}
         </S.Name>

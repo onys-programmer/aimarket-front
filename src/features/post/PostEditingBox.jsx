@@ -311,7 +311,7 @@ const S = {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 50%;
+    width: 100%;
     height: 92.3%;
     border: 1px solid #ddd;
     background-color: #fafafa;

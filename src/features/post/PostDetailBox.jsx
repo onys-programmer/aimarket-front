@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card, Input, Flex, Button } from '@chakra-ui/react';
+import { Card, Input, Flex, Button, Avatar } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import Comments from '../comment/Comments';
 import { useSelector } from 'react-redux';
@@ -105,7 +105,7 @@ export default function PostDetailBox({ postId }) {
             }
           </S.Description>
           <S.UserArea>
-            <S.ProfileImage src={post?.creator?.image} />
+            <Avatar width="40px" height="40px" src={post?.creator?.image} />
             <S.UserName>{post?.creator?.name}</S.UserName>
           </S.UserArea>
           <S.CommentArea>
@@ -189,11 +189,6 @@ const S = {
     align-items: center;
     gap: 8px;
     padding: 0 8px;
-  `,
-  ProfileImage: styled.img`
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
   `,
   UserName: styled.div`
     padding: 8px;

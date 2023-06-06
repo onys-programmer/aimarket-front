@@ -52,6 +52,10 @@ export const slice = createSlice({
     updateProfileImageBase64: (state, action) => {
       state.profileImageBase64 = action.payload;
     },
+    updateUserProfileImage: (state, action) => {
+      state.user.image = action.payload;
+      localStorage.setItem("user", JSON.stringify(state.user));
+    }
   },
 });
 
@@ -68,6 +72,7 @@ export const {
   updateProfileUploadModalVisibility,
   updateProfileImage,
   updateProfileImageBase64,
+  updateUserProfileImage,
 } = slice.actions;
 
 export default slice.reducer;
