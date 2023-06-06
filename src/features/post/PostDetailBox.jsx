@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card, Input, Flex, Button, Avatar } from '@chakra-ui/react';
+import { Card, Flex, Button, Avatar, Textarea } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import Comments from '../comment/Comments';
 import { useSelector } from 'react-redux';
@@ -28,12 +28,6 @@ export default function PostDetailBox({ postId }) {
 
   const handleChangeCommentInput = (e) => {
     setCommentInput(e.target.value);
-  };
-
-  const handleEnterSubmitComment = (e) => {
-    if (e.key === 'Enter') {
-      handleSubmitComment(commentData);
-    }
   };
 
   const handleSubmitComment = async (data) => {
@@ -118,7 +112,7 @@ export default function PostDetailBox({ postId }) {
             {
               user?.userId &&
               <Flex gap="8px" marginTop="auto">
-                <Input placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} onKeyDown={handleEnterSubmitComment} value={commentInput} />
+                <Textarea placeholder='댓글을 작성하세요.' onChange={handleChangeCommentInput} value={commentInput} />
                 <Button onClick={handleClickSubmitComment}>작성</Button>
               </Flex>
             }
