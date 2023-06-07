@@ -17,7 +17,7 @@ export default function PostDetailPage() {
   const user = useSelector((state) => state.app.user);
   const [creator, setCreator] = useState('');
   const isOwner = creator?.id === user?.userId;
-
+  console.log(isOwner, "isOwner")
   useEffect(() => {
     if (post) {
       setCreator(post.creator);
@@ -62,27 +62,28 @@ export default function PostDetailPage() {
           <Flex justifyContent="space-between" alignItems="center" gap={3}>
             <BackButton url={"/"} />
             {
-              isOwner &
-                boxState === 'editing' ?
-                <Button
-                  color="#333333"
-                  marginLeft={"auto"}
-                  onClick={handleClickCancelEditPost}
-                >
-                  취소
-                </Button>
-                :
-                <EditIcon
-                  boxSize={9}
-                  cursor="pointer"
-                  color="#333333"
-                  marginLeft={"auto"}
-                  _hover={{ color: "#279df4" }}
-                  onClick={handleClickEditPost}
-                />
+              isOwner && boxState === 'editing' &&
+              <Button
+                color="#333333"
+                marginLeft={"auto"}
+                onClick={handleClickCancelEditPost}
+              >
+                취소
+              </Button>
             }
             {
-              isOwner & boxState !== 'editing' ?
+              isOwner && boxState !== 'editing' &&
+              <EditIcon
+                boxSize={9}
+                cursor="pointer"
+                color="#333333"
+                marginLeft={"auto"}
+                _hover={{ color: "#279df4" }}
+                onClick={handleClickEditPost}
+              />
+            }
+            {
+              isOwner && boxState !== 'editing' ?
                 <DeletePostButton post={post} />
                 :
                 <></>
