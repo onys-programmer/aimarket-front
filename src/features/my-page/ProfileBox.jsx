@@ -15,8 +15,10 @@ export default function ProfileBox() {
 
   const requestUpdateProfileImage = async () => {
     const formData = new FormData();
-    const profileImageFile = convertBase64ToFile(profileImageBase64);
-    formData.append('image', profileImageFile);
+    if (profileImageBase64) {
+      const profileImageFile = convertBase64ToFile(profileImageBase64);
+      formData.append('image', profileImageFile);
+    }
     formData.append('userId', user?.userId);
 
     try {
@@ -34,6 +36,8 @@ export default function ProfileBox() {
         dispatch(updateProfileImage(""));
         dispatch(updateProfileImageBase64(""));
         alert('프로필 이미지가 변경되었습니다.');
+        // refresh
+        window.location.reload();
       }
     } catch (error) {
       alert('프로필 이미지 변경에 실패하였습니다.');
@@ -43,6 +47,10 @@ export default function ProfileBox() {
   const handleClickSaveProfileImage = () => {
     if (profileImageBase64) {
       requestUpdateProfileImage();
+    } else {
+      if (window.confirm("프로필이 삭제되고 기본 프로필로 전환됩니다.")) {
+        requestUpdateProfileImage();
+      }
     }
   };
 
