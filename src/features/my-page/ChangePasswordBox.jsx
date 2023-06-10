@@ -116,6 +116,12 @@ export default function ChangePasswordBox() {
     setPageState("tryToChange");
   };
 
+  const handleEnterSubmitPassword = (e) => {
+    if (e.key === 'Enter') {
+      handleClickSubmitPassword();
+    }
+  };
+
   return (
     <S.Container>
       {
@@ -129,16 +135,20 @@ export default function ChangePasswordBox() {
       {
         pageState === "tryToChange" &&
         (
-          <Flex gap={2}>
-            <Input
-              type="password"
-              placeholder="비밀번호"
-              onChange={handleChangePasswordInput}
-            />
-            <Button onClick={handleClickSubmitPassword}>
-              입력
-            </Button>
-          </Flex>
+          <Stack>
+            <S.SmallText>비밀번호를 입력해주세요.</S.SmallText>
+            <Flex gap={2}>
+              <Input
+                type="password"
+                placeholder="비밀번호"
+                onChange={handleChangePasswordInput}
+                onKeyDown={handleEnterSubmitPassword}
+              />
+              <Button onClick={handleClickSubmitPassword}>
+                입력
+              </Button>
+            </Flex>
+          </Stack>
         )
       }
       {
@@ -173,5 +183,9 @@ const S = {
       cursor: pointer;
       color: #279df4;
     },
+  `,
+  SmallText: styled.p`
+    font-size: 1.4vh;
+    color: #666666;
   `,
 };
