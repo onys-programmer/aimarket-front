@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../services/api/api';
-import { Card, Input, Flex, Button, Textarea, Stack, Text } from '@chakra-ui/react';
+import { Card, Input, Flex, Button, Textarea, Stack, Text, Image } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { useSelector } from 'react-redux';
 import { useDropzone } from 'react-dropzone';
@@ -13,6 +13,7 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
   const [titleInput, setTitleInput] = useState(post?.title);
   const [contentInput, setContentInput] = useState(post?.description);
   const [replaceImage, setReplaceImage] = useState(false);
+  const [imageTemp, setImageTemp] = useState('');
 
   const {
     acceptedFiles,
@@ -23,6 +24,10 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
       'image/jpg': [],
       'image/jpeg': [],
       'image/png': []
+    },
+    onDrop: acceptedFiles => {
+      const profileImageTemp = URL.createObjectURL(acceptedFiles[0]);
+      setImageTemp(profileImageTemp)
     }
   });
 
@@ -169,6 +174,7 @@ export default function PostEditingBox({ postId, boxState, setBoxState }) {
                   </div>
                   <aside>
                     <Text fontSize={"100%"}>올라간 파일</Text>
+                    <Image src={imageTemp} />
                     <Text fontSize={"150%"}>{acceptedFileItems}</Text>
                   </aside>
                 </section>

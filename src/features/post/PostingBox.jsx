@@ -1,4 +1,4 @@
-import { Card, Flex, Stack, Input, Button, Textarea, Text } from '@chakra-ui/react';
+import { Card, Flex, Stack, Input, Button, Textarea, Text, Image } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { BASE_URL } from '../../services/api/api';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ export default function PostingBox() {
   const user = useSelector((state) => state.app.user);
   const [titleInput, setTitleInput] = useState('');
   const [contentInput, setContentInput] = useState('');
+  const [imageTemp, setImageTemp] = useState('');
 
   const handleChangeTitle = (e) => {
     setTitleInput(e.target.value);
@@ -89,6 +90,10 @@ export default function PostingBox() {
       'image/jpg': [],
       'image/jpeg': [],
       'image/png': []
+    },
+    onDrop: acceptedFiles => {
+      const profileImageTemp = URL.createObjectURL(acceptedFiles[0]);
+      setImageTemp(profileImageTemp)
     }
   });
 
@@ -128,6 +133,7 @@ export default function PostingBox() {
             </div>
             <aside>
               <Text fontSize={"100%"}>올라간 파일</Text>
+              <Image src={imageTemp} />
               <Text fontSize={"150%"}>{acceptedFileItems}</Text>
             </aside>
           </section>
