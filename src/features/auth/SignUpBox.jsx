@@ -38,7 +38,7 @@ export default function SignUpBox() {
     const formData = new FormData();
     if (profileImageBase64) {
       const profileImageFile = convertBase64ToFile(profileImageBase64);
-      formData.append('image', profileImageFile);
+      await formData.append('image', profileImageFile);
     }
     formData.append('name', nameInput);
     formData.append('email', emailInput);
