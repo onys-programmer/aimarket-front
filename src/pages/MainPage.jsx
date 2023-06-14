@@ -16,10 +16,11 @@ export default function MainPage() {
 
   const fetchPosts = useCallback(async (pageNum) => {
     console.log(pageNum, "pagenum");
+    const perPage = window.screen.width < 1200 ? 20 : 50;
     const response = await axios.get(`${BASE_URL}/posts/`, {
       params: {
         page: pageNum, // 원하는 값으로 설정
-        perPage: 20, // 원하는 값으로 설정
+        perPage, // 원하는 값으로 설정
       },
     });
     if (response.status !== 200) {
