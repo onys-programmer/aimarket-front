@@ -22,11 +22,11 @@ export default function Comments({ comments, forList = false, isMine }) {
         comments?.map((comment) => {
           return (
             forList ?
-              <S.CommentRow onClick={() => handleClickGoToPost(comment)}>
+              <S.CommentRow onClick={() => handleClickGoToPost(comment)} key={Math.random()}>
                 <Comment comment={comment} forList={forList} isMine={isMine} />
               </S.CommentRow>
               :
-              <Comment comment={comment} forList={forList} isMine={isMine} />
+              <Comment comment={comment} forList={forList} isMine={isMine} key={Math.random()} />
           );
         })
       }

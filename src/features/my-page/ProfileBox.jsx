@@ -65,7 +65,6 @@ export default function ProfileBox() {
       if (!user?.userId) return;
       try {
         const userRes = await fetchUser(user?.userId);
-        console.log(user, "user");
         dispatch(updateUserProfileImage(userRes?.image));
       } catch (error) {
         console.error('사용자 프로필 이미지 가져오기 오류:', error);
