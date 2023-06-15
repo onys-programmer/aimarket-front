@@ -72,7 +72,7 @@ export default function ProfileBox() {
     };
 
     fetchUserProfileImage();
-  }, []);
+  }, [dispatch, user?.userId]);
 
   return (
     <S.Container>
