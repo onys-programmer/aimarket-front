@@ -13,4 +13,14 @@ const fetchPostByIndex = async (index) => {
   }
 };
 
-export { BASE_URL, fetchPostByIndex };
+const fetchUser = async (userId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/users/${userId}`);
+    const responseData = response.data;
+    return responseData.user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+  }
+};
+
+export { BASE_URL, fetchPostByIndex, fetchUser };

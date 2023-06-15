@@ -6,6 +6,8 @@ import axios from "axios";
 import { BASE_URL } from "../../services/api/api";
 import styled from "@emotion/styled";
 import ProfileAvater from "../../components/ProfileAvatar";
+import { useEffect } from "react";
+import { fetchUser } from "../../services/api/api";
 
 export default function ProfileBox() {
   const dispatch = useDispatch();
@@ -57,6 +59,21 @@ export default function ProfileBox() {
   const handleClickOpenModal = () => {
     dispatch(updateProfileUploadModalVisibility(true));
   };
+
+  useEffect(() => {
+    const fetchUserProfileImage = async () => {
+      if (!user?.userId) return;
+      try {
+        const userRes = await fetchUser(user?.userId);
+        console.log(user, "user");
+        dispatch(updateUserProfileImage(userRes?.image));
+      } catch (error) {
+        console.error('사용자 프로필 이미지 가져오기 오류:', error);
+      }
+    };
+
+    fetchUserProfileImage();
+  }, []);
 
   return (
     <S.Container>
