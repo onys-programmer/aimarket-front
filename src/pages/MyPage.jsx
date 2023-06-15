@@ -29,8 +29,7 @@ export default function MyPage() {
     }
   };
 
-  const requestDeleteUser = async () => {
-    const data = { userId: user?.userId };
+  const requestDeleteUser = async (data) => {
     try {
       await axios.delete(`${BASE_URL}/users`, {
         data: data,
@@ -48,7 +47,12 @@ export default function MyPage() {
 
   const handleClickConfirmDeleteUser = () => {
     if (window.confirm("정말로 탈퇴하시겠습니까?")) {
-      requestDeleteUser();
+      if (user?.userId) {
+        const data = { userId: user?.userId };
+        requestDeleteUser(data);
+      } else {
+        alert("현재 유저 정보가 없습니다. 다시 로그인해주세요.");
+      }
     }
   }
 

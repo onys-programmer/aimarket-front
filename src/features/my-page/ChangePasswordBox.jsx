@@ -182,7 +182,7 @@ const S = {
     &:hover {
       cursor: pointer;
       color: #279df4;
-    },
+    }
   `,
   SmallText: styled.p`
     font-size: 1.4vh;
